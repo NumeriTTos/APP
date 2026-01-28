@@ -40,7 +40,7 @@ body {
     width: 100%;
     max-width: 480px;
 
-    transform: scale(1.2);          /* aumenta tudo em 20% */
+    transform: scale(1.5);          /* aumenta tudo em 20% */
     transform-origin: top center;   /* mantém centrado */
 }
 
@@ -203,3 +203,4 @@ li button.remover {
     color: var(--md-primary-dark) !important;
     font-weight: bold;
 }
+
