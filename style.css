@@ -23,12 +23,14 @@ html, body {
     overflow-x: hidden;
 }
 
-/* CENTRAR TUDO */
+/* CENTRAR TUDO + DOBRAR TAMANHO DAS LETRAS */
 body {
     font-family: "Roboto", Arial, sans-serif;
     background: var(--md-background);
     margin: 0;
     padding: 20px;
+
+    font-size: 32px; /* DOBRO do tamanho padrão (16px → 32px) */
 
     display: flex;
     flex-direction: column;
@@ -40,8 +42,8 @@ body {
     width: 100%;
     max-width: 480px;
 
-    transform: scale(1.5);          /* aumenta tudo em 50% */
-    transform-origin: top center;   /* mantém centrado */
+    transform: scale(1.5);
+    transform-origin: top center;
 }
 
 /* ------------------------------
@@ -50,6 +52,7 @@ body {
 h2, h3 {
     text-align: center;
     width: 100%;
+    font-size: 2em; /* aumenta proporcionalmente */
 }
 
 /* ------------------------------
@@ -66,7 +69,7 @@ form {
 }
 
 label {
-    font-size: 14px;
+    font-size: 1.2em;
     font-weight: 600;
     margin-top: 12px;
     display: block;
@@ -74,11 +77,11 @@ label {
 
 input {
     width: 100%;
-    padding: 14px;
+    padding: 20px;
     margin-top: 6px;
     border-radius: var(--md-radius);
     border: 1px solid #ccc;
-    font-size: 16px;
+    font-size: 1.4em;
     background: #fafafa;
     transition: 0.2s;
     box-sizing: border-box;
@@ -97,17 +100,18 @@ input:focus {
 #aviso {
     margin: 12px 0;
     font-weight: 600;
-    min-height: 22px;
+    min-height: 32px;
+    font-size: 1.2em;
 }
 
 /* ------------------------------
    BOTÕES
 --------------------------------*/
 button {
-    padding: 14px 18px;
+    padding: 20px;
     border: none;
     border-radius: var(--md-radius);
-    font-size: 16px;
+    font-size: 1.4em;
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
@@ -141,29 +145,26 @@ ul {
     width: 100%;
 }
 
-/* Cada item ocupa apenas UMA linha */
 li {
     background: var(--md-surface);
-    padding: 12px;
-    margin-bottom: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
     border-radius: var(--md-radius);
     box-shadow: var(--md-shadow);
 
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
+    gap: 10px;
 
     width: 100%;
     box-sizing: border-box;
-
     overflow: hidden;
 }
 
-/* Texto do número e valor */
 li .info {
     flex-grow: 1;
-    font-size: 15px;
+    font-size: 1.4em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -172,32 +173,29 @@ li .info {
 /* Botões pequenos lado a lado */
 li button {
     width: auto;
-    padding: 6px 8px;
-    font-size: 12px;
-    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 1.2em;
+    border-radius: 10px;
     white-space: nowrap;
     flex-shrink: 0;
 }
 
-/* Botão apagar */
 li button.apagar {
     background: var(--md-error);
     color: white;
 }
 
-/* Botão tornar fixo */
 li button.btn-fixo {
     background: var(--md-primary);
     color: white;
 }
 
-/* Botão remover fixo */
 li button.remover {
     background: #ff9800;
     color: white;
 }
 
-/* Fixos destacados (apenas LI) */
+/* Fixos destacados */
 li.fixo {
     border-left: 6px solid var(--md-primary);
     color: var(--md-primary-dark) !important;
