@@ -35,12 +35,12 @@ body {
     align-items: center;
 }
 
-/* CONTAINER CENTRAL + AUMENTO 20% */
+/* CONTAINER CENTRAL + AUMENTO 50% */
 .container {
     width: 100%;
     max-width: 480px;
 
-    transform: scale(1.5);          /* aumenta tudo em 20% */
+    transform: scale(1.5);          /* aumenta tudo em 50% */
     transform-origin: top center;   /* mantém centrado */
 }
 
@@ -157,7 +157,7 @@ li {
     width: 100%;
     box-sizing: border-box;
 
-    overflow: hidden; /* impede estourar */
+    overflow: hidden;
 }
 
 /* Texto do número e valor */
@@ -186,7 +186,7 @@ li button.apagar {
 }
 
 /* Botão tornar fixo */
-li button.fixo {
+li button.btn-fixo {
     background: var(--md-primary);
     color: white;
 }
@@ -197,10 +197,9 @@ li button.remover {
     color: white;
 }
 
-/* Fixos destacados */
-.fixo {
+/* Fixos destacados (apenas LI) */
+li.fixo {
     border-left: 6px solid var(--md-primary);
     color: var(--md-primary-dark) !important;
     font-weight: bold;
 }
-
