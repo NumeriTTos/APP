@@ -1,0 +1,199 @@
+/* ------------------------------
+   BASE (Material Design 3)
+--------------------------------*/
+:root {
+    --md-primary: #6200ee;
+    --md-primary-light: #bb86fc;
+    --md-primary-dark: #3700b3;
+
+    --md-surface: #ffffff;
+    --md-background: #f2f2f7;
+
+    --md-error: #cf6679;
+    --md-success: #0a8754;
+
+    --md-radius: 14px;
+    --md-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+body {
+    font-family: "Roboto", Arial, sans-serif;
+    background: var(--md-background);
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* ------------------------------
+   TÍTULOS
+--------------------------------*/
+h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* ------------------------------
+   CARTÃO DO FORMULÁRIO
+--------------------------------*/
+form {
+    background: var(--md-surface);
+    padding: 20px;
+    border-radius: var(--md-radius);
+    box-shadow: var(--md-shadow);
+    margin-bottom: 25px;
+}
+
+/* ------------------------------
+   INPUTS
+--------------------------------*/
+label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 12px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 6px;
+    border-radius: var(--md-radius);
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background: #fafafa;
+    transition: 0.2s;
+}
+
+input:focus {
+    border-color: var(--md-primary);
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(98,0,238,0.2);
+}
+
+/* ------------------------------
+   AVISOS
+--------------------------------*/
+#aviso {
+    margin: 12px 0;
+    font-weight: 600;
+    min-height: 22px;
+}
+
+/* ------------------------------
+   BOTÕES (Material)
+--------------------------------*/
+button {
+    padding: 14px 18px;
+    border: none;
+    border-radius: var(--md-radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#botao {
+    background: var(--md-primary);
+    color: white;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#botao:disabled {
+    background: #c7b7f3;
+    cursor: not-allowed;
+}
+
+#apagarTudo {
+    background: var(--md-error);
+    color: white;
+    width: 100%;
+    margin-top: 20px;
+}
+
+button:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+/* ------------------------------
+   LISTA DE REGISTOS
+--------------------------------*/
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: var(--md-surface);
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: var(--md-radius);
+    box-shadow: var(--md-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Botões dentro dos registos */
+li button {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--md-radius);
+    font-size: 14px;
+}
+
+li button:nth-child(2) {
+    background: var(--md-error);
+    color: white;
+}
+
+li button:nth-child(3) {
+    background: var(--md-primary);
+    color: white;
+}
+
+li button:nth-child(4) {
+    background: #ff9800;
+    color: white;
+}
+
+/* ------------------------------
+   FIXOS DESTACADOS
+--------------------------------*/
+.fixo {
+    border-left: 6px solid var(--md-primary);
+    color: var(--md-primary-dark) !important;
+    font-weight: bold;
+}
+
+/* ------------------------------
+   RESPONSIVO (TABLET / DESKTOP)
+--------------------------------*/
+@media (min-width: 600px) {
+    body {
+        padding: 40px;
+    }
+
+    form, ul, #apagarTudo, h3 {
+        max-width: 480px;
+        margin: auto;
+    }
+
+    li {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    li button {
+        width: auto;
+    }
+}

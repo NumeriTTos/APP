@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>NumeriTTos</title>
+
+    <!-- Fonte Android (Roboto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- O teu CSS externo estilo Android -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h2>NumeriTTos</h2>
+
+    <form>
+        <label for="numero">Número (3 dígitos):</label>
+        <input type="text" id="numero" maxlength="3" inputmode="numeric" autocomplete="off">
+
+        <label for="valor">Valor:</label>
+        <input type="text" id="valor" inputmode="decimal" autocomplete="off">
+
+        <div id="aviso"></div>
+
+        <button id="botao" type="submit" disabled>Marcar</button>
+    </form>
+
+    <h3>Total deste número: <span id="totalGlobal">0.00</span> / 100</h3>
+
+    <h3>Registos:</h3>
+    <ul id="lista"></ul>
+
+    <button id="apagarTudo">Apagar Lista Completa</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
