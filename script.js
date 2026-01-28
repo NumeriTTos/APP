@@ -67,11 +67,9 @@ function adicionarItemNaLista(num, val, isFixo = false) {
     li.dataset.numero = num;
     li.dataset.valor = val;
 
-    if (isFixo) {
-        li.classList.add("fixo");
-    }
+    if (isFixo) li.classList.add("fixo");
 
-    // TEXTO (agora numa <span class="info">)
+    // TEXTO (span .info)
     const info = document.createElement("span");
     info.className = "info";
     info.textContent = `Nº ${num} — ${val}`;
@@ -113,7 +111,6 @@ function adicionarItemNaLista(num, val, isFixo = false) {
             li.remove();
             guardarLista();
 
-            // FIXOS CONTAM → já estavam no total, não mexer
             adicionarItemNaLista(num, val, true);
             mostrarTotalDoNumero();
         });
@@ -133,7 +130,6 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 
             li.remove();
 
-            // FIXOS CONTAM → continuam a contar como normais, não mexer no total
             adicionarItemNaLista(num, val, false);
             guardarLista();
             mostrarTotalDoNumero();
