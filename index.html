@@ -17,7 +17,7 @@
 
         <h2>NumeriTTos</h2>
 
-        <form>
+        <form novalidate>
             <label for="numero">Número (3 dígitos):</label>
             <input type="text" id="numero" maxlength="3" autocomplete="off" inputmode="numeric">
 
@@ -29,7 +29,7 @@
             <button id="botao" type="submit" disabled>Marcar</button>
         </form>
 
-        <h3>Total deste número: <span id="totalGlobal">0.00</span> / 100</h3>
+        <h3><span id="totalGlobal">0.00</span> / 100</h3>
 
         <label for="pesquisa">Pesquisar:</label>
         <input type="text" id="pesquisa" autocomplete="off" placeholder="Procurar número ou valor">
