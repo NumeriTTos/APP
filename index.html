@@ -12,29 +12,33 @@
 </head>
 
 <body>
+    <div class="container">
 
-    <h2>NumeriTTos</h2>
+        <h2>NumeriTTos</h2>
 
-    <form>
-        <label for="numero">Número (3 dígitos):</label>
-        <input type="text" id="numero" maxlength="3" inputmode="numeric" autocomplete="off">
+        <form>
+            <label for="numero">Número (3 dígitos):</label>
+            <input type="text" id="numero" maxlength="3" autocomplete="off" inputmode="numeric">
 
-        <label for="valor">Valor:</label>
-        <input type="text" id="valor" inputmode="decimal" autocomplete="off">
+            <label for="valor">Valor:</label>
+            <input type="text" id="valor" autocomplete="off" inputmode="decimal">
 
-        <div id="aviso"></div>
+            <div id="aviso"></div>
 
-        <button id="botao" type="submit" disabled>Marcar</button>
-    </form>
+            <button id="botao" type="submit" disabled>Marcar</button>
+        </form>
 
-    <h3>Total deste número: <span id="totalGlobal">0.00</span> / 100</h3>
+        <h3>Total deste número: <span id="totalGlobal">0.00</span> / 100</h3>
 
-    <h3>Registos:</h3>
-    <ul id="lista"></ul>
+        <h3>Registos:</h3>
+        <ul id="lista"></ul>
 
-    <button id="apagarTudo">Apagar Lista Completa</button>
+        <button id="apagarTudo">Apagar Lista Completa</button>
+
+    </div>
 
     <script src="script.js"></script>
 </body>
-</html>
 
+
+</html>
