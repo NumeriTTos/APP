@@ -75,15 +75,15 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 
     if (isFixo) li.classList.add("fixo");
 
-    // TEXTO
+    // TEXTO (sem "Nº")
     const info = document.createElement("span");
     info.className = "info";
-    info.textContent = `Nº ${num} — ${parseFloat(val).toFixed(2)}`;
+    info.textContent = `${num} — ${parseFloat(val).toFixed(2)}`;
     li.appendChild(info);
 
-    // Botão apagar
+    // Botão apagar (X pequeno)
     const btnApagar = document.createElement("button");
-    btnApagar.textContent = "Apagar";
+    btnApagar.textContent = "X";
     btnApagar.className = "apagar";
 
     btnApagar.addEventListener("click", () => {
@@ -106,7 +106,7 @@ function adicionarItemNaLista(num, val, isFixo = false) {
     if (!isFixo) {
         const btnFixo = document.createElement("button");
         btnFixo.textContent = "Fixo";
-        btnFixo.className = "fixo";
+        btnFixo.className = "btn-fixo";
 
         btnFixo.addEventListener("click", () => {
             fixos.push({ numero: num, valor: val });
