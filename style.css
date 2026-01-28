@@ -16,31 +16,34 @@
     --md-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
+/* CENTRAR TUDO */
 body {
     font-family: "Roboto", Arial, sans-serif;
     background: var(--md-background);
     margin: 0;
     padding: 20px;
-    color: #333;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* CONTAINER CENTRAL */
+.container {
+    width: 100%;
+    max-width: 480px;
 }
 
 /* ------------------------------
    TÍTULOS
 --------------------------------*/
-h2 {
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 15px;
-}
-
-h3 {
-    font-size: 18px;
-    margin-top: 20px;
-    margin-bottom: 10px;
+h2, h3 {
+    text-align: center;
+    width: 100%;
 }
 
 /* ------------------------------
-   CARTÃO DO FORMULÁRIO
+   FORMULÁRIO
 --------------------------------*/
 form {
     background: var(--md-surface);
@@ -48,11 +51,10 @@ form {
     border-radius: var(--md-radius);
     box-shadow: var(--md-shadow);
     margin-bottom: 25px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* ------------------------------
-   INPUTS
---------------------------------*/
 label {
     font-size: 14px;
     font-weight: 600;
@@ -69,6 +71,7 @@ input {
     font-size: 16px;
     background: #fafafa;
     transition: 0.2s;
+    box-sizing: border-box;
 }
 
 input:focus {
@@ -88,7 +91,7 @@ input:focus {
 }
 
 /* ------------------------------
-   BOTÕES (Material)
+   BOTÕES
 --------------------------------*/
 button {
     padding: 14px 18px;
@@ -98,12 +101,13 @@ button {
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #botao {
     background: var(--md-primary);
     color: white;
-    width: 100%;
     margin-top: 10px;
 }
 
@@ -115,85 +119,74 @@ button {
 #apagarTudo {
     background: var(--md-error);
     color: white;
-    width: 100%;
     margin-top: 20px;
 }
 
-button:hover:not(:disabled) {
-    opacity: 0.9;
-}
-
 /* ------------------------------
-   LISTA DE REGISTOS
+   LISTA DE REGISTOS (CORRIGIDO)
 --------------------------------*/
 ul {
     list-style: none;
     padding: 0;
+    width: 100%;
 }
 
+/* Cada item ocupa apenas UMA linha */
 li {
     background: var(--md-surface);
-    padding: 16px;
+    padding: 12px;
     margin-bottom: 12px;
     border-radius: var(--md-radius);
     box-shadow: var(--md-shadow);
+
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 
-/* Botões dentro dos registos */
-li button {
     width: 100%;
-    padding: 12px;
-    border-radius: var(--md-radius);
-    font-size: 14px;
+    box-sizing: border-box;
+    white-space: nowrap; /* impede quebrar linha */
 }
 
-li button:nth-child(2) {
+/* Texto do número e valor */
+li .info {
+    flex-grow: 1;
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Botões pequenos lado a lado */
+li button {
+    width: auto;
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+/* Botão apagar */
+li button.apagar {
     background: var(--md-error);
     color: white;
 }
 
-li button:nth-child(3) {
+/* Botão tornar fixo */
+li button.fixo {
     background: var(--md-primary);
     color: white;
 }
 
-li button:nth-child(4) {
+/* Botão remover fixo */
+li button.remover {
     background: #ff9800;
     color: white;
 }
 
-/* ------------------------------
-   FIXOS DESTACADOS
---------------------------------*/
+/* Fixos destacados */
 .fixo {
     border-left: 6px solid var(--md-primary);
     color: var(--md-primary-dark) !important;
     font-weight: bold;
-}
-
-/* ------------------------------
-   RESPONSIVO (TABLET / DESKTOP)
---------------------------------*/
-@media (min-width: 600px) {
-    body {
-        padding: 40px;
-    }
-
-    form, ul, #apagarTudo, h3 {
-        max-width: 480px;
-        margin: auto;
-    }
-
-    li {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    li button {
-        width: auto;
-    }
 }
