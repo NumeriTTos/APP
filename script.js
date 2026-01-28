@@ -5,6 +5,7 @@ const botao = document.getElementById("botao");
 const lista = document.getElementById("lista");
 const apagarTudo = document.getElementById("apagarTudo");
 const totalGlobalSpan = document.getElementById("totalGlobal");
+const pesquisa = document.getElementById("pesquisa");
 
 // -------------------------
 //  FIXOS (LOCALSTORAGE)
@@ -36,7 +37,9 @@ function mostrarTotalDoNumero() {
 numero.addEventListener("paste", e => e.preventDefault());
 valor.addEventListener("paste", e => e.preventDefault());
 
-// Carregar lista ao iniciar
+// -------------------------
+//  CARREGAR LISTA AO INICIAR
+// -------------------------
 window.addEventListener("load", () => {
     fixos.forEach(item => adicionarItemNaLista(item.numero, item.valor, true));
 
@@ -44,7 +47,9 @@ window.addEventListener("load", () => {
     dados.forEach(item => adicionarItemNaLista(item.numero, item.valor, false));
 });
 
-// Guardar lista normal no localStorage
+// -------------------------
+//  GUARDAR LISTAS
+// -------------------------
 function guardarLista() {
     const itens = [];
     document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
@@ -56,12 +61,13 @@ function guardarLista() {
     localStorage.setItem("registos", JSON.stringify(itens));
 }
 
-// Guardar fixos no localStorage
 function guardarFixos() {
     localStorage.setItem("fixos", JSON.stringify(fixos));
 }
 
-// Criar item na lista
+// -------------------------
+//  ADICIONAR ITEM À LISTA
+// -------------------------
 function adicionarItemNaLista(num, val, isFixo = false) {
     const li = document.createElement("li");
     li.dataset.numero = num;
@@ -69,10 +75,10 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 
     if (isFixo) li.classList.add("fixo");
 
-    // TEXTO (span .info)
+    // TEXTO
     const info = document.createElement("span");
     info.className = "info";
-    info.textContent = `Nº ${num} — ${val}`;
+    info.textContent = `Nº ${num} — ${parseFloat(val).toFixed(2)}`;
     li.appendChild(info);
 
     // Botão apagar
@@ -82,8 +88,6 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 
     btnApagar.addEventListener("click", () => {
         li.remove();
-
-        // FIXOS CONTAM → subtrair sempre
         atualizarTotal(num, -parseFloat(val));
 
         if (isFixo) {
@@ -98,7 +102,7 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 
     li.appendChild(btnApagar);
 
-    // Botão tornar fixo (normais)
+    // Botão tornar fixo
     if (!isFixo) {
         const btnFixo = document.createElement("button");
         btnFixo.textContent = "Fixo";
@@ -118,7 +122,7 @@ function adicionarItemNaLista(num, val, isFixo = false) {
         li.appendChild(btnFixo);
     }
 
-    // Botão remover fixo (fixos → normais)
+    // Botão remover fixo
     if (isFixo) {
         const btnRemoverFixo = document.createElement("button");
         btnRemoverFixo.textContent = "Normal";
@@ -129,7 +133,6 @@ function adicionarItemNaLista(num, val, isFixo = false) {
             guardarFixos();
 
             li.remove();
-
             adicionarItemNaLista(num, val, false);
             guardarLista();
             mostrarTotalDoNumero();
@@ -155,9 +158,7 @@ numero.addEventListener("input", () => {
 });
 
 valor.addEventListener("input", () => {
-    let v = valor.value;
-    v = v.replace(",", ".");
-    v = v.replace(/[^0-9.]/g, "");
+    let v = valor.value.replace(",", ".").replace(/[^0-9.]/g, "");
     const partes = v.split(".");
     if (partes.length > 2) v = partes[0] + "." + partes[1];
     valor.value = v;
@@ -203,7 +204,6 @@ function validarTudo() {
         return;
     }
 
-    // LIMITE POR NÚMERO
     const num = numero.value;
     const totalAtual = totalDoNumero(num);
     const falta = 100 - totalAtual;
@@ -220,27 +220,36 @@ function validarTudo() {
 }
 
 // -------------------------
-//  REGISTAR ITEM NORMAL
+//  ENTER → SÓ CONFIRMA SE BOTÃO ESTIVER ATIVO
 // -------------------------
-
-// Impedir que Enter confirme o formulário
 document.addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
         e.preventDefault();
+
+        if (!botao.disabled) {
+            botao.click();
+        }
     }
 });
 
-
+// -------------------------
+//  REGISTAR ITEM NORMAL
+// -------------------------
 botao.addEventListener("click", (e) => {
     e.preventDefault();
 
-    const val = parseFloat(valor.value);
+    let val = parseFloat(valor.value);
+    if (!isNaN(val)) {
+        val = val.toFixed(2);
+        valor.value = val;
+    }
+
     const num = numero.value;
 
     atualizarTotal(num, val);
     mostrarTotalDoNumero();
 
-    adicionarItemNaLista(num, valor.value, false);
+    adicionarItemNaLista(num, val, false);
     guardarLista();
 
     aviso.textContent = "✔️ Registado com sucesso!";
@@ -253,7 +262,7 @@ botao.addEventListener("click", (e) => {
 });
 
 // -------------------------
-//  APAGAR LISTA COMPLETA (só normais)
+//  APAGAR LISTA COMPLETA
 // -------------------------
 apagarTudo.addEventListener("click", () => {
     document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
@@ -267,3 +276,14 @@ apagarTudo.addEventListener("click", () => {
     mostrarTotalDoNumero();
 });
 
+// -------------------------
+//  PESQUISA NA LISTA
+// -------------------------
+pesquisa.addEventListener("input", () => {
+    const termo = pesquisa.value.toLowerCase();
+
+    document.querySelectorAll("#lista li").forEach(li => {
+        const texto = li.innerText.toLowerCase();
+        li.style.display = texto.includes(termo) ? "flex" : "none";
+    });
+});
