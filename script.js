@@ -69,16 +69,18 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 
     if (isFixo) {
         li.classList.add("fixo");
-        li.style.color = "blue";
-        li.style.fontWeight = "bold";
     }
 
-    li.textContent = `Número: ${num} — Valor: ${val} `;
+    // TEXTO (agora numa <span class="info">)
+    const info = document.createElement("span");
+    info.className = "info";
+    info.textContent = `Nº ${num} — ${val}`;
+    li.appendChild(info);
 
     // Botão apagar
     const btnApagar = document.createElement("button");
     btnApagar.textContent = "Apagar";
-    btnApagar.style.marginLeft = "10px";
+    btnApagar.className = "apagar";
 
     btnApagar.addEventListener("click", () => {
         li.remove();
@@ -101,8 +103,8 @@ function adicionarItemNaLista(num, val, isFixo = false) {
     // Botão tornar fixo (normais)
     if (!isFixo) {
         const btnFixo = document.createElement("button");
-        btnFixo.textContent = "Tornar Fixo";
-        btnFixo.style.marginLeft = "10px";
+        btnFixo.textContent = "Fixo";
+        btnFixo.className = "fixo";
 
         btnFixo.addEventListener("click", () => {
             fixos.push({ numero: num, valor: val });
@@ -122,8 +124,8 @@ function adicionarItemNaLista(num, val, isFixo = false) {
     // Botão remover fixo (fixos → normais)
     if (isFixo) {
         const btnRemoverFixo = document.createElement("button");
-        btnRemoverFixo.textContent = "Remover Fixo";
-        btnRemoverFixo.style.marginLeft = "10px";
+        btnRemoverFixo.textContent = "Normal";
+        btnRemoverFixo.className = "remover";
 
         btnRemoverFixo.addEventListener("click", () => {
             fixos = fixos.filter(f => !(f.numero === num && f.valor === val));
