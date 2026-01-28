@@ -7,6 +7,9 @@ const apagarTudo = document.getElementById("apagarTudo");
 const totalGlobalSpan = document.getElementById("totalGlobal");
 const pesquisa = document.getElementById("pesquisa");
 
+// Flag para impedir que validarTudo apague a mensagem após Enter
+let acabouDeRegistar = false;
+
 // -------------------------
 //  FIXOS (LOCALSTORAGE)
 // -------------------------
@@ -172,6 +175,13 @@ valor.addEventListener("blur", () => {
 });
 
 function validarTudo() {
+
+    // Impede que a mensagem desapareça logo após Enter
+    if (acabouDeRegistar) {
+        acabouDeRegistar = false;
+        return;
+    }
+
     const min = 0.25;
     const max = 50;
     let numValor = parseFloat(valor.value);
@@ -251,6 +261,9 @@ botao.addEventListener("click", (e) => {
 
     adicionarItemNaLista(num, val, false);
     guardarLista();
+
+    // Ativar flag para impedir validarTudo de apagar a mensagem
+    acabouDeRegistar = true;
 
     aviso.textContent = "✔️ Registado com sucesso!";
     aviso.style.color = "green";
