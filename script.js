@@ -222,6 +222,15 @@ function validarTudo() {
 // -------------------------
 //  REGISTAR ITEM NORMAL
 // -------------------------
+
+// Impedir que Enter confirme o formulário
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+    }
+});
+
+
 botao.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -257,3 +266,4 @@ apagarTudo.addEventListener("click", () => {
     localStorage.removeItem("registos");
     mostrarTotalDoNumero();
 });
+
