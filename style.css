@@ -16,6 +16,13 @@
     --md-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
+/* Impedir scroll lateral */
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 /* CENTRAR TUDO */
 body {
     font-family: "Roboto", Arial, sans-serif;
@@ -28,10 +35,13 @@ body {
     align-items: center;
 }
 
-/* CONTAINER CENTRAL */
+/* CONTAINER CENTRAL + AUMENTO 20% */
 .container {
     width: 100%;
     max-width: 480px;
+
+    transform: scale(1.2);          /* aumenta tudo em 20% */
+    transform-origin: top center;   /* mantém centrado */
 }
 
 /* ------------------------------
@@ -123,7 +133,7 @@ button {
 }
 
 /* ------------------------------
-   LISTA DE REGISTOS (CORRIGIDO)
+   LISTA DE REGISTOS (1 LINHA)
 --------------------------------*/
 ul {
     list-style: none;
@@ -142,11 +152,12 @@ li {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
 
     width: 100%;
     box-sizing: border-box;
-    white-space: nowrap; /* impede quebrar linha */
+
+    overflow: hidden; /* impede estourar */
 }
 
 /* Texto do número e valor */
@@ -155,15 +166,17 @@ li .info {
     font-size: 15px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Botões pequenos lado a lado */
 li button {
     width: auto;
-    padding: 8px 10px;
-    font-size: 13px;
+    padding: 6px 8px;
+    font-size: 12px;
     border-radius: 8px;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* Botão apagar */
