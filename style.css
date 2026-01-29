@@ -37,12 +37,13 @@ body {
     align-items: center;
 }
 
-/* CONTAINER CENTRAL + AUMENTO 50% */
+/* CONTAINER CENTRAL + AUMENTO 50% + 10% HORIZONTAL */
 .container {
     width: 100%;
     max-width: 480px;
 
-    transform: scale(1.5);
+    /* +10% horizontal, +50% vertical */
+    transform: scaleX(1.1) scaleY(1.5);
     transform-origin: top center;
 }
 
@@ -178,13 +179,15 @@ li .info {
 li button.apagar {
     background: var(--md-error);
     color: white;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     padding: 0;
-    font-size: 0.9em;
+    font-size: 0.7em;
     font-weight: bold;
-    border-radius: 8px;
-    text-align: center;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Botão Fixo (curto) */
@@ -192,11 +195,11 @@ li button.btn-fixo {
     background: var(--md-primary);
     color: white;
     padding: 4px 6px;
-    font-size: 0.6em;
+    font-size: 0.55em;
     border-radius: 6px;
     white-space: nowrap;
-    width: auto;
-    min-width: 50px;
+    min-width: 45px;
+    height: 28px;
     text-align: center;
 }
 
@@ -205,11 +208,11 @@ li button.remover {
     background: #ff9800;
     color: white;
     padding: 4px 6px;
-    font-size: 0.6em;
+    font-size: 0.55em;
     border-radius: 6px;
     white-space: nowrap;
-    width: auto;
-    min-width: 50px;
+    min-width: 45px;
+    height: 28px;
     text-align: center;
 }
 
@@ -222,11 +225,10 @@ li.fixo {
 
 /* ==========================================================
    🔥 AJUSTES EXCLUSIVOS PARA A LINHA DA LISTA
-   (caixa de texto + botões compactos)
    ========================================================== */
 
 li .extra-input {
-    width: 60px;
+    width: 110px; /* AUMENTADO HORIZONTALMENTE */
     padding: 6px;
     font-size: 0.7em;
     border-radius: 8px;
@@ -235,22 +237,7 @@ li .extra-input {
     box-sizing: border-box;
 }
 
-/* Botão X pequeno */
-li button.apagar {
-    background: var(--md-error);
-    color: white;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    font-size: 0.7em;
-    font-weight: bold;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Botão verde pequeno ✓ (mesma dimensão do X) */
+/* Botão verde pequeno ✓ */
 li button.desfazer-fixo {
     background: var(--md-success);
     color: white;
