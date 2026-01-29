@@ -194,11 +194,11 @@ li button.apagar {
 li button.btn-fixo {
     background: var(--md-primary);
     color: white;
-    padding: 4px 6px;
+    padding: 2px 4px;
     font-size: 0.55em;
     border-radius: 6px;
     white-space: nowrap;
-    min-width: 45px;
+    min-width: 20px;
     height: 28px;
     text-align: center;
 }
@@ -260,4 +260,5 @@ li button.remover {
     height: 28px;
     border-radius: 6px;
 }
+
 
