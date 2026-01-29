@@ -1,3 +1,6 @@
+// ======================================================
+//  ELEMENTOS
+// ======================================================
 const numero = document.getElementById("numero");
 const valor = document.getElementById("valor");
 const aviso = document.getElementById("aviso");
@@ -10,14 +13,39 @@ const pesquisa = document.getElementById("pesquisa");
 // Flag para impedir que validarTudo apague a mensagem após Enter
 let acabouDeRegistar = false;
 
-// -------------------------
+// ======================================================
+//  POPUP MODERNO DE CONFIRMAÇÃO
+// ======================================================
+function mostrarPopupConfirmacao(mensagem) {
+    return new Promise(resolve => {
+        const popup = document.getElementById("popup-confirmacao");
+        const msg = document.getElementById("popup-mensagem");
+        const btnSim = document.getElementById("popup-sim");
+        const btnNao = document.getElementById("popup-nao");
+
+        msg.textContent = mensagem;
+        popup.style.display = "flex";
+
+        btnSim.onclick = () => {
+            popup.style.display = "none";
+            resolve(true);
+        };
+
+        btnNao.onclick = () => {
+            popup.style.display = "none";
+            resolve(false);
+        };
+    });
+}
+
+// ======================================================
 //  FIXOS (LOCALSTORAGE)
-// -------------------------
+// ======================================================
 let fixos = JSON.parse(localStorage.getItem("fixos")) || [];
 
-// -------------------------
+// ======================================================
 //  TOTAIS POR NÚMERO
-// -------------------------
+// ======================================================
 let totais = JSON.parse(localStorage.getItem("totais")) || {};
 
 function totalDoNumero(num) {
@@ -40,9 +68,9 @@ function mostrarTotalDoNumero() {
 numero.addEventListener("paste", e => e.preventDefault());
 valor.addEventListener("paste", e => e.preventDefault());
 
-// -------------------------
+// ======================================================
 //  CARREGAR LISTA AO INICIAR
-// -------------------------
+// ======================================================
 window.addEventListener("load", () => {
     fixos.forEach(item => adicionarItemNaLista(item.numero, item.valor, true));
 
@@ -50,9 +78,9 @@ window.addEventListener("load", () => {
     dados.forEach(item => adicionarItemNaLista(item.numero, item.valor, false));
 });
 
-// -------------------------
+// ======================================================
 //  GUARDAR LISTAS
-// -------------------------
+// ======================================================
 function guardarLista() {
     const itens = [];
     document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
@@ -68,9 +96,9 @@ function guardarFixos() {
     localStorage.setItem("fixos", JSON.stringify(fixos));
 }
 
-// -------------------------
+// ======================================================
 //  ADICIONAR ITEM À LISTA
-// -------------------------
+// ======================================================
 function adicionarItemNaLista(num, val, isFixo = false) {
     const li = document.createElement("li");
     li.dataset.numero = num;
@@ -97,22 +125,22 @@ function adicionarItemNaLista(num, val, isFixo = false) {
     btnApagar.className = "apagar";
 
     btnApagar.addEventListener("click", () => {
+        mostrarPopupConfirmacao("Tem a certeza que deseja apagar este número?")
+            .then(confirmar => {
+                if (!confirmar) return;
 
-        // CONFIRMAÇÃO
-        const confirmar = confirm("Tem a certeza que deseja apagar este número?");
-        if (!confirmar) return;
+                li.remove();
+                atualizarTotal(num, -parseFloat(val));
 
-        li.remove();
-        atualizarTotal(num, -parseFloat(val));
+                if (isFixo) {
+                    fixos = fixos.filter(f => !(f.numero === num && f.valor === val));
+                    guardarFixos();
+                } else {
+                    guardarLista();
+                }
 
-        if (isFixo) {
-            fixos = fixos.filter(f => !(f.numero === num && f.valor === val));
-            guardarFixos();
-        } else {
-            guardarLista();
-        }
-
-        mostrarTotalDoNumero();
+                mostrarTotalDoNumero();
+            });
     });
 
     li.appendChild(btnApagar);
@@ -159,9 +187,9 @@ function adicionarItemNaLista(num, val, isFixo = false) {
     lista.appendChild(li);
 }
 
-// -------------------------
+// ======================================================
 //  VALIDAÇÕES
-// -------------------------
+// ======================================================
 numero.addEventListener("input", () => {
     numero.value = numero.value.replace(/[^0-9]/g, "");
     if (numero.value.length >= 3) {
@@ -240,22 +268,19 @@ function validarTudo() {
     botao.disabled = false;
 }
 
-// -------------------------
+// ======================================================
 //  ENTER → SÓ CONFIRMA SE BOTÃO ESTIVER ATIVO
-// -------------------------
+// ======================================================
 document.addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
         e.preventDefault();
-
-        if (!botao.disabled) {
-            botao.click();
-        }
+        if (!botao.disabled) botao.click();
     }
 });
 
-// -------------------------
+// ======================================================
 //  REGISTAR ITEM NORMAL
-// -------------------------
+// ======================================================
 botao.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -284,28 +309,30 @@ botao.addEventListener("click", (e) => {
     botao.disabled = true;
 });
 
-// -------------------------
-//  APAGAR LISTA COMPLETA (COM CONFIRMAÇÃO)
-// -------------------------
+// ======================================================
+//  APAGAR LISTA COMPLETA (COM POPUP)
+// ======================================================
 apagarTudo.addEventListener("click", () => {
 
-    const confirmar = confirm("Tem a certeza que deseja apagar TODOS os números?");
-    if (!confirmar) return;
+    mostrarPopupConfirmacao("Tem a certeza que deseja apagar TODOS os números?")
+        .then(confirmar => {
+            if (!confirmar) return;
 
-    document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
-        const num = li.dataset.numero;
-        const val = parseFloat(li.dataset.valor);
-        atualizarTotal(num, -val);
-        li.remove();
-    });
+            document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
+                const num = li.dataset.numero;
+                const val = parseFloat(li.dataset.valor);
+                atualizarTotal(num, -val);
+                li.remove();
+            });
 
-    localStorage.removeItem("registos");
-    mostrarTotalDoNumero();
+            localStorage.removeItem("registos");
+            mostrarTotalDoNumero();
+        });
 });
 
-// -------------------------
+// ======================================================
 //  PESQUISA NA LISTA
-// -------------------------
+// ======================================================
 pesquisa.addEventListener("input", () => {
     const termo = pesquisa.value.toLowerCase();
 
