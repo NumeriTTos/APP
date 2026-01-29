@@ -43,7 +43,7 @@ body {
     max-width: 480px;
 
     /* +10% horizontal, +50% vertical */
-    transform: scaleX(1.1) scaleY(1.5);
+    transform: scaleX(1.65) scaleY(1.5);
     transform-origin: top center;
 }
 
@@ -260,3 +260,4 @@ li button.remover {
     height: 28px;
     border-radius: 6px;
 }
+
