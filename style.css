@@ -1,6 +1,6 @@
-/* ------------------------------
+/* ==========================================================
    BASE (Material Design 3)
---------------------------------*/
+   ========================================================== */
 :root {
     --md-primary: #6200ee;
     --md-primary-light: #bb86fc;
@@ -23,7 +23,9 @@ html, body {
     overflow-x: hidden;
 }
 
-/* CENTRAR TUDO + DOBRAR TAMANHO DAS LETRAS */
+/* ==========================================================
+   LAYOUT GERAL
+   ========================================================== */
 body {
     font-family: "Roboto", Arial, sans-serif;
     background: var(--md-background);
@@ -31,34 +33,32 @@ body {
     padding: 20px;
 
     font-size: 32px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* CONTAINER CENTRAL + AUMENTO 50% + 10% HORIZONTAL */
+/* Container central ampliado */
 .container {
     width: 100%;
     max-width: 480px;
 
-    /* 150% vertical + 10% horizontal adicional */
     transform: scaleX(1.65) scaleY(1.5);
     transform-origin: top center;
 }
 
-/* ------------------------------
+/* ==========================================================
    TÍTULOS
---------------------------------*/
+   ========================================================== */
 h2, h3 {
     text-align: center;
     width: 100%;
     font-size: 2em;
 }
 
-/* ------------------------------
+/* ==========================================================
    FORMULÁRIO
---------------------------------*/
+   ========================================================== */
 form {
     background: var(--md-surface);
     padding: 20px;
@@ -95,9 +95,7 @@ input:focus {
     box-shadow: 0 0 0 3px rgba(98,0,238,0.2);
 }
 
-/* ------------------------------
-   AVISOS
---------------------------------*/
+/* Avisos */
 #aviso {
     margin: 12px 0;
     font-weight: 600;
@@ -105,9 +103,9 @@ input:focus {
     font-size: 1.2em;
 }
 
-/* ------------------------------
-   BOTÕES
---------------------------------*/
+/* ==========================================================
+   BOTÕES PRINCIPAIS
+   ========================================================== */
 button {
     padding: 20px;
     border: none;
@@ -137,9 +135,9 @@ button {
     margin-top: 20px;
 }
 
-/* ------------------------------
-   LISTA DE REGISTOS (1 LINHA)
---------------------------------*/
+/* ==========================================================
+   LISTA DE REGISTOS
+   ========================================================== */
 ul {
     list-style: none;
     padding: 0;
@@ -171,11 +169,11 @@ li .info {
     white-space: nowrap;
 }
 
-/* ------------------------------
+/* ==========================================================
    BOTÕES DA LISTA
---------------------------------*/
+   ========================================================== */
 
-/* Botão X pequeno */
+/* Botão X */
 li button.apagar {
     background: var(--md-error);
     color: white;
@@ -190,22 +188,35 @@ li button.apagar {
     justify-content: center;
 }
 
-/* Botão Fixo (reduzido e limpo) */
+/* Botão 📌 fixar */
 li button.btn-fixo {
     background: var(--md-primary);
     color: white;
     padding: 0;
-    font-size: 0.45em;   /* reduz o tamanho do emoji */
+    font-size: 0.45em;
     border-radius: 6px;
-    width: 28px;         /* igual ao X e ao ✓ */
+    width: 28px;
     height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* Botão ✓ desfazer fixo */
+li button.desfazer-fixo {
+    background: var(--md-success);
+    color: white;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font-size: 0.7em;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-/* Botão Normal (curto) */
+/* Botão "Normal" (laranja) */
 li button.remover {
     background: #ff9800;
     color: white;
@@ -218,17 +229,14 @@ li button.remover {
     text-align: center;
 }
 
-/* Fixos destacados */
+/* Destaque dos fixos */
 li.fixo {
     border-left: 6px solid var(--md-primary);
     color: var(--md-primary-dark) !important;
     font-weight: bold;
 }
 
-/* ==========================================================
-   🔥 AJUSTES EXCLUSIVOS PARA A LINHA DA LISTA
-   ========================================================== */
-
+/* Campo extra */
 li .extra-input {
     width: 110px;
     padding: 6px;
@@ -239,16 +247,56 @@ li .extra-input {
     box-sizing: border-box;
 }
 
-/* Botão verde pequeno ✓ */
-li button.desfazer-fixo {
-    background: var(--md-success);
-    color: white;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    font-size: 0.7em;
-    border-radius: 6px;
-    display: flex;
+/* ==========================================================
+   POPUP MODERNO
+   ========================================================== */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45);
+    display: none;
     align-items: center;
     justify-content: center;
+    z-index: 999;
+}
+
+.popup-box {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    width: 80%;
+    max-width: 360px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    font-size: 0.8em;
+}
+
+.popup-botoes {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.popup-btn-sim {
+    background: var(--md-error);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1em;
+    flex: 1;
+}
+
+.popup-btn-nao {
+    background: #ccc;
+    color: black;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1em;
+    flex: 1;
 }
