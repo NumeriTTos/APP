@@ -70,6 +70,7 @@ function guardarFixos() {
 
 // -------------------------
 //  ADICIONAR ITEM À LISTA
+//  (ATUALIZADO COM CAIXA DE TEXTO + BOTÃO VERDE ✓)
 // -------------------------
 function adicionarItemNaLista(num, val, isFixo = false) {
     const li = document.createElement("li");
@@ -78,13 +79,20 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 
     if (isFixo) li.classList.add("fixo");
 
-    // TEXTO (sem "Nº")
+    // TEXTO
     const info = document.createElement("span");
     info.className = "info";
     info.textContent = `${num} — ${parseFloat(val).toFixed(2)}`;
     li.appendChild(info);
 
-    // Botão apagar (X pequeno)
+    // CAIXA DE TEXTO
+    const extraInput = document.createElement("input");
+    extraInput.type = "text";
+    extraInput.className = "extra-input";
+    extraInput.placeholder = "txt";
+    li.appendChild(extraInput);
+
+    // Botão apagar (X)
     const btnApagar = document.createElement("button");
     btnApagar.textContent = "X";
     btnApagar.className = "apagar";
@@ -125,13 +133,13 @@ function adicionarItemNaLista(num, val, isFixo = false) {
         li.appendChild(btnFixo);
     }
 
-    // Botão remover fixo
+    // Botão verde pequeno ✓ para desfazer fixo
     if (isFixo) {
-        const btnRemoverFixo = document.createElement("button");
-        btnRemoverFixo.textContent = "Normal";
-        btnRemoverFixo.className = "remover";
+        const btnDesfazer = document.createElement("button");
+        btnDesfazer.textContent = "✓";
+        btnDesfazer.className = "desfazer-fixo";
 
-        btnRemoverFixo.addEventListener("click", () => {
+        btnDesfazer.addEventListener("click", () => {
             fixos = fixos.filter(f => !(f.numero === num && f.valor === val));
             guardarFixos();
 
@@ -141,7 +149,7 @@ function adicionarItemNaLista(num, val, isFixo = false) {
             mostrarTotalDoNumero();
         });
 
-        li.appendChild(btnRemoverFixo);
+        li.appendChild(btnDesfazer);
     }
 
     lista.appendChild(li);
