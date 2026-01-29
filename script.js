@@ -10,11 +10,10 @@ const apagarTudo = document.getElementById("apagarTudo");
 const totalGlobalSpan = document.getElementById("totalGlobal");
 const pesquisa = document.getElementById("pesquisa");
 
-// Flag para impedir que validarTudo apague a mensagem após Enter
 let acabouDeRegistar = false;
 
 // ======================================================
-//  POPUP MODERNO DE CONFIRMAÇÃO
+//  POPUP MODERNO
 // ======================================================
 function mostrarPopupConfirmacao(mensagem) {
     return new Promise(resolve => {
@@ -26,28 +25,36 @@ function mostrarPopupConfirmacao(mensagem) {
         msg.textContent = mensagem;
         popup.style.display = "flex";
 
-        btnSim.onclick = () => {
-            popup.style.display = "none";
-            resolve(true);
-        };
-
-        btnNao.onclick = () => {
-            popup.style.display = "none";
-            resolve(false);
-        };
+        btnSim.onclick = () => { popup.style.display = "none"; resolve(true); };
+        btnNao.onclick = () => { popup.style.display = "none"; resolve(false); };
     });
 }
 
 // ======================================================
-//  FIXOS (LOCALSTORAGE)
+//  LOCALSTORAGE
 // ======================================================
 let fixos = JSON.parse(localStorage.getItem("fixos")) || [];
-
-// ======================================================
-//  TOTAIS POR NÚMERO
-// ======================================================
 let totais = JSON.parse(localStorage.getItem("totais")) || {};
 
+function guardarLista() {
+    const itens = [];
+    document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
+        itens.push({
+            numero: li.dataset.numero,
+            valor: li.dataset.valor,
+            texto: li.querySelector(".extra-input").value || ""
+        });
+    });
+    localStorage.setItem("registos", JSON.stringify(itens));
+}
+
+function guardarFixos() {
+    localStorage.setItem("fixos", JSON.stringify(fixos));
+}
+
+// ======================================================
+//  TOTAIS
+// ======================================================
 function totalDoNumero(num) {
     return totais[num] ? parseFloat(totais[num]) : 0;
 }
@@ -60,66 +67,60 @@ function atualizarTotal(num, valor) {
 
 function mostrarTotalDoNumero() {
     const num = numero.value;
-    const total = totalDoNumero(num);
-    totalGlobalSpan.textContent = total.toFixed(2);
+    totalGlobalSpan.textContent = totalDoNumero(num).toFixed(2);
 }
-
-// Impedir colagens
-numero.addEventListener("paste", e => e.preventDefault());
-valor.addEventListener("paste", e => e.preventDefault());
 
 // ======================================================
 //  CARREGAR LISTA AO INICIAR
 // ======================================================
 window.addEventListener("load", () => {
-    fixos.forEach(item => adicionarItemNaLista(item.numero, item.valor, true));
+    fixos.forEach(item => adicionarItemNaLista(item, true));
 
     const dados = JSON.parse(localStorage.getItem("registos")) || [];
-    dados.forEach(item => adicionarItemNaLista(item.numero, item.valor, false));
+    dados.forEach(item => adicionarItemNaLista(item, false));
 });
-
-// ======================================================
-//  GUARDAR LISTAS
-// ======================================================
-function guardarLista() {
-    const itens = [];
-    document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
-        itens.push({
-            numero: li.dataset.numero,
-            valor: li.dataset.valor
-        });
-    });
-    localStorage.setItem("registos", JSON.stringify(itens));
-}
-
-function guardarFixos() {
-    localStorage.setItem("fixos", JSON.stringify(fixos));
-}
 
 // ======================================================
 //  ADICIONAR ITEM À LISTA
 // ======================================================
-function adicionarItemNaLista(num, val, isFixo = false) {
+function adicionarItemNaLista(obj, isFixo = false) {
+
+    const num = obj.numero;
+    const val = obj.valor;
+    const textoGuardado = obj.texto || "";
+
     const li = document.createElement("li");
     li.dataset.numero = num;
     li.dataset.valor = val;
 
     if (isFixo) li.classList.add("fixo");
 
-    // TEXTO
+    // Texto principal
     const info = document.createElement("span");
     info.className = "info";
     info.textContent = `${num} — ${parseFloat(val).toFixed(2)}`;
     li.appendChild(info);
 
-    // CAIXA DE TEXTO
+    // Caixa extra
     const extraInput = document.createElement("input");
     extraInput.type = "text";
     extraInput.className = "extra-input";
     extraInput.placeholder = "txt";
+    extraInput.value = textoGuardado;
     li.appendChild(extraInput);
 
-    // Botão apagar (X)
+    // Guardar texto sempre que escreve
+    extraInput.addEventListener("input", () => {
+        if (isFixo) {
+            const item = fixos.find(f => f.numero === num && f.valor === val);
+            if (item) item.texto = extraInput.value;
+            guardarFixos();
+        } else {
+            guardarLista();
+        }
+    });
+
+    // Botão apagar
     const btnApagar = document.createElement("button");
     btnApagar.textContent = "X";
     btnApagar.className = "apagar";
@@ -145,27 +146,27 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 
     li.appendChild(btnApagar);
 
-    // Botão tornar fixo (📌)
+    // Botão fixar
     if (!isFixo) {
         const btnFixo = document.createElement("button");
         btnFixo.textContent = "📌";
         btnFixo.className = "btn-fixo";
 
         btnFixo.addEventListener("click", () => {
-            fixos.push({ numero: num, valor: val });
+            fixos.push({ numero: num, valor: val, texto: extraInput.value });
             guardarFixos();
 
             li.remove();
             guardarLista();
 
-            adicionarItemNaLista(num, val, true);
+            adicionarItemNaLista({ numero: num, valor: val, texto: extraInput.value }, true);
             mostrarTotalDoNumero();
         });
 
         li.appendChild(btnFixo);
     }
 
-    // Botão verde ✓ para desfazer fixo
+    // Botão desfazer fixo
     if (isFixo) {
         const btnDesfazer = document.createElement("button");
         btnDesfazer.textContent = "✓";
@@ -176,7 +177,7 @@ function adicionarItemNaLista(num, val, isFixo = false) {
             guardarFixos();
 
             li.remove();
-            adicionarItemNaLista(num, val, false);
+            adicionarItemNaLista({ numero: num, valor: val, texto: extraInput.value }, false);
             guardarLista();
             mostrarTotalDoNumero();
         });
@@ -191,11 +192,8 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 //  VALIDAÇÕES
 // ======================================================
 numero.addEventListener("input", () => {
-    numero.value = numero.value.replace(/[^0-9]/g, "");
-    if (numero.value.length >= 3) {
-        numero.value = numero.value.slice(0, 3);
-        valor.focus();
-    }
+    numero.value = numero.value.replace(/[^0-9]/g, "").slice(0, 3);
+    if (numero.value.length === 3) valor.focus();
     mostrarTotalDoNumero();
     validarTudo();
 });
@@ -225,53 +223,36 @@ function validarTudo() {
     const max = 50;
     let numValor = parseFloat(valor.value);
 
-    if (numero.value.length !== 3) {
-        aviso.textContent = "⚠️ O número deve ter 3 dígitos";
-        aviso.style.color = "red";
-        botao.disabled = true;
-        return;
-    }
+    if (numero.value.length !== 3)
+        return erro("⚠️ O número deve ter 3 dígitos");
 
-    if (isNaN(numValor)) {
-        aviso.textContent = "⚠️ Introduza um valor válido";
-        aviso.style.color = "red";
-        botao.disabled = true;
-        return;
-    }
+    if (isNaN(numValor))
+        return erro("⚠️ Introduza um valor válido");
 
-    if (numValor < min || numValor > max) {
-        aviso.textContent = `⚠️ Valor deve estar entre ${min.toFixed(2)} e ${max.toFixed(2)}`;
-        aviso.style.color = "red";
-        botao.disabled = true;
-        return;
-    }
+    if (numValor < min || numValor > max)
+        return erro(`⚠️ Valor deve estar entre ${min.toFixed(2)} e ${max.toFixed(2)}`);
 
-    if ((numValor * 100) % 25 !== 0) {
-        aviso.textContent = "⚠️ O valor deve ser múltiplo de 0.25";
-        aviso.style.color = "red";
-        botao.disabled = true;
-        return;
-    }
+    if ((numValor * 100) % 25 !== 0)
+        return erro("⚠️ O valor deve ser múltiplo de 0.25");
 
-    const num = numero.value;
-    const totalAtual = totalDoNumero(num);
-    const falta = 100 - totalAtual;
-
-    if (numValor > falta) {
-        aviso.textContent = `⚠️ Este número só pode receber mais ${falta.toFixed(2)}`;
-        aviso.style.color = "red";
-        botao.disabled = true;
-        return;
-    }
+    const falta = 100 - totalDoNumero(numero.value);
+    if (numValor > falta)
+        return erro(`⚠️ Este número só pode receber mais ${falta.toFixed(2)}`);
 
     aviso.textContent = "";
     botao.disabled = false;
 }
 
+function erro(msg) {
+    aviso.textContent = msg;
+    aviso.style.color = "red";
+    botao.disabled = true;
+}
+
 // ======================================================
-//  ENTER → SÓ CONFIRMA SE BOTÃO ESTIVER ATIVO
+//  ENTER → CONFIRMAR
 // ======================================================
-document.addEventListener("keydown", function(e) {
+document.addEventListener("keydown", e => {
     if (e.key === "Enter") {
         e.preventDefault();
         if (!botao.disabled) botao.click();
@@ -279,23 +260,20 @@ document.addEventListener("keydown", function(e) {
 });
 
 // ======================================================
-//  REGISTAR ITEM NORMAL
+//  REGISTAR ITEM
 // ======================================================
-botao.addEventListener("click", (e) => {
+botao.addEventListener("click", e => {
     e.preventDefault();
 
     let val = parseFloat(valor.value);
-    if (!isNaN(val)) {
-        val = val.toFixed(2);
-        valor.value = val;
-    }
+    if (!isNaN(val)) valor.value = val.toFixed(2);
 
     const num = numero.value;
 
-    atualizarTotal(num, val);
+    atualizarTotal(num, valor.value);
     mostrarTotalDoNumero();
 
-    adicionarItemNaLista(num, val, false);
+    adicionarItemNaLista({ numero: num, valor: valor.value, texto: "" }, false);
     guardarLista();
 
     acabouDeRegistar = true;
@@ -310,18 +288,15 @@ botao.addEventListener("click", (e) => {
 });
 
 // ======================================================
-//  APAGAR LISTA COMPLETA (COM POPUP)
+//  APAGAR LISTA COMPLETA
 // ======================================================
 apagarTudo.addEventListener("click", () => {
-
     mostrarPopupConfirmacao("Tem a certeza que deseja apagar TODOS os números?")
         .then(confirmar => {
             if (!confirmar) return;
 
             document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
-                const num = li.dataset.numero;
-                const val = parseFloat(li.dataset.valor);
-                atualizarTotal(num, -val);
+                atualizarTotal(li.dataset.numero, -parseFloat(li.dataset.valor));
                 li.remove();
             });
 
@@ -331,13 +306,11 @@ apagarTudo.addEventListener("click", () => {
 });
 
 // ======================================================
-//  PESQUISA NA LISTA
+//  PESQUISA
 // ======================================================
 pesquisa.addEventListener("input", () => {
     const termo = pesquisa.value.toLowerCase();
-
     document.querySelectorAll("#lista li").forEach(li => {
-        const texto = li.innerText.toLowerCase();
-        li.style.display = texto.includes(termo) ? "flex" : "none";
+        li.style.display = li.innerText.toLowerCase().includes(termo) ? "flex" : "none";
     });
 });
