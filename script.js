@@ -114,24 +114,25 @@ function adicionarItemNaLista(num, val, isFixo = false) {
     li.appendChild(btnApagar);
 
     // Botão tornar fixo
-    if (!isFixo) {
-        const btnFixo = document.createElement("button");
-        btnFixo.textContent = "Fixo";
-        btnFixo.className = "btn-fixo";
+if (!isFixo) {
+    const btnFixo = document.createElement("button");
+    btnFixo.textContent = "📌";   // ← ALTERADO AQUI
+    btnFixo.className = "btn-fixo";
 
-        btnFixo.addEventListener("click", () => {
-            fixos.push({ numero: num, valor: val });
-            guardarFixos();
+    btnFixo.addEventListener("click", () => {
+        fixos.push({ numero: num, valor: val });
+        guardarFixos();
 
-            li.remove();
-            guardarLista();
+        li.remove();
+        guardarLista();
 
-            adicionarItemNaLista(num, val, true);
-            mostrarTotalDoNumero();
-        });
+        adicionarItemNaLista(num, val, true);
+        mostrarTotalDoNumero();
+    });
 
-        li.appendChild(btnFixo);
-    }
+    li.appendChild(btnFixo);
+}
+
 
     // Botão verde pequeno ✓ para desfazer fixo
     if (isFixo) {
