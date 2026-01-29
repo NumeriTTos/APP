@@ -70,7 +70,6 @@ function guardarFixos() {
 
 // -------------------------
 //  ADICIONAR ITEM À LISTA
-//  (ATUALIZADO COM CAIXA DE TEXTO + BOTÃO VERDE ✓)
 // -------------------------
 function adicionarItemNaLista(num, val, isFixo = false) {
     const li = document.createElement("li");
@@ -98,6 +97,11 @@ function adicionarItemNaLista(num, val, isFixo = false) {
     btnApagar.className = "apagar";
 
     btnApagar.addEventListener("click", () => {
+
+        // CONFIRMAÇÃO
+        const confirmar = confirm("Tem a certeza que deseja apagar este número?");
+        if (!confirmar) return;
+
         li.remove();
         atualizarTotal(num, -parseFloat(val));
 
@@ -113,28 +117,27 @@ function adicionarItemNaLista(num, val, isFixo = false) {
 
     li.appendChild(btnApagar);
 
-    // Botão tornar fixo
-if (!isFixo) {
-    const btnFixo = document.createElement("button");
-    btnFixo.textContent = "📌";   // ← ALTERADO AQUI
-    btnFixo.className = "btn-fixo";
+    // Botão tornar fixo (📌)
+    if (!isFixo) {
+        const btnFixo = document.createElement("button");
+        btnFixo.textContent = "📌";
+        btnFixo.className = "btn-fixo";
 
-    btnFixo.addEventListener("click", () => {
-        fixos.push({ numero: num, valor: val });
-        guardarFixos();
+        btnFixo.addEventListener("click", () => {
+            fixos.push({ numero: num, valor: val });
+            guardarFixos();
 
-        li.remove();
-        guardarLista();
+            li.remove();
+            guardarLista();
 
-        adicionarItemNaLista(num, val, true);
-        mostrarTotalDoNumero();
-    });
+            adicionarItemNaLista(num, val, true);
+            mostrarTotalDoNumero();
+        });
 
-    li.appendChild(btnFixo);
-}
+        li.appendChild(btnFixo);
+    }
 
-
-    // Botão verde pequeno ✓ para desfazer fixo
+    // Botão verde ✓ para desfazer fixo
     if (isFixo) {
         const btnDesfazer = document.createElement("button");
         btnDesfazer.textContent = "✓";
@@ -185,7 +188,6 @@ valor.addEventListener("blur", () => {
 
 function validarTudo() {
 
-    // Impede que a mensagem desapareça logo após Enter
     if (acabouDeRegistar) {
         acabouDeRegistar = false;
         return;
@@ -271,7 +273,6 @@ botao.addEventListener("click", (e) => {
     adicionarItemNaLista(num, val, false);
     guardarLista();
 
-    // Ativar flag para impedir validarTudo de apagar a mensagem
     acabouDeRegistar = true;
 
     aviso.textContent = "✔️ Registado com sucesso!";
@@ -284,9 +285,13 @@ botao.addEventListener("click", (e) => {
 });
 
 // -------------------------
-//  APAGAR LISTA COMPLETA
+//  APAGAR LISTA COMPLETA (COM CONFIRMAÇÃO)
 // -------------------------
 apagarTudo.addEventListener("click", () => {
+
+    const confirmar = confirm("Tem a certeza que deseja apagar TODOS os números?");
+    if (!confirmar) return;
+
     document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
         const num = li.dataset.numero;
         const val = parseFloat(li.dataset.valor);
