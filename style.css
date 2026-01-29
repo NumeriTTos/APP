@@ -42,7 +42,7 @@ body {
     width: 100%;
     max-width: 480px;
 
-    /* +10% horizontal, +50% vertical */
+    /* 150% vertical + 10% horizontal adicional */
     transform: scaleX(1.65) scaleY(1.5);
     transform-origin: top center;
 }
@@ -190,18 +190,20 @@ li button.apagar {
     justify-content: center;
 }
 
-/* Botão Fixo (curto) */
+/* Botão Fixo (reduzido e limpo) */
 li button.btn-fixo {
     background: var(--md-primary);
     color: white;
-    padding: 2px 4px;
-    font-size: 0.55em;
+    padding: 0;
+    font-size: 0.45em;   /* reduz o tamanho do emoji */
     border-radius: 6px;
-    white-space: nowrap;
-    min-width: 20px;
+    width: 28px;         /* igual ao X e ao ✓ */
     height: 28px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
 
 /* Botão Normal (curto) */
 li button.remover {
@@ -228,7 +230,7 @@ li.fixo {
    ========================================================== */
 
 li .extra-input {
-    width: 110px; /* AUMENTADO HORIZONTALMENTE */
+    width: 110px;
     padding: 6px;
     font-size: 0.7em;
     border-radius: 8px;
@@ -250,15 +252,3 @@ li button.desfazer-fixo {
     align-items: center;
     justify-content: center;
 }
-
-/* Botões compactos Fixo / Normal */
-li button.btn-fixo,
-li button.remover {
-    padding: 4px 6px;
-    font-size: 0.55em;
-    min-width: 45px;
-    height: 28px;
-    border-radius: 6px;
-}
-
-
