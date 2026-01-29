@@ -219,3 +219,57 @@ li.fixo {
     color: var(--md-primary-dark) !important;
     font-weight: bold;
 }
+
+/* ==========================================================
+   🔥 AJUSTES EXCLUSIVOS PARA A LINHA DA LISTA
+   (caixa de texto + botões compactos)
+   ========================================================== */
+
+li .extra-input {
+    width: 60px;
+    padding: 6px;
+    font-size: 0.7em;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    box-sizing: border-box;
+}
+
+/* Botão X pequeno */
+li button.apagar {
+    background: var(--md-error);
+    color: white;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font-size: 0.7em;
+    font-weight: bold;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Botão verde pequeno ✓ (mesma dimensão do X) */
+li button.desfazer-fixo {
+    background: var(--md-success);
+    color: white;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font-size: 0.7em;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Botões compactos Fixo / Normal */
+li button.btn-fixo,
+li button.remover {
+    padding: 4px 6px;
+    font-size: 0.55em;
+    min-width: 45px;
+    height: 28px;
+    border-radius: 6px;
+}
