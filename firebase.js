@@ -10,12 +10,12 @@ import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-s
 // 2. Configuração do Firebase
 // ------------------------------
 const firebaseConfig = {
-  apiKey: "AQUI",
-  authDomain: "AQUI",
-  projectId: "AQUI",
-  storageBucket: "AQUI",
-  messagingSenderId: "AQUI",
-  appId: "AQUI"
+  apiKey: "AIzaSyAyoIj0xb9Vk-kz0Ln8pwIx7rUcrp_F6aM",
+  authDomain: "wapp-1f195.firebaseapp.com",
+  projectId: "wapp-1f195",
+  storageBucket: "wapp-1f195.firebasestorage.app",
+  messagingSenderId: "1042673353512",
+  appId: "1:1042673353512:web:0a01dd53b9af3fa70b061d"
 };
 
 // ------------------------------
@@ -29,3 +29,4 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
