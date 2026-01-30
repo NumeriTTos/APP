@@ -1,4 +1,8 @@
-import { auth, db } from "./firebase.js";
+import { auth } from "./firebase.js";
+import { 
+    signInWithEmailAndPassword, 
+    onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // ======================================================
 //  ELEMENTOS DO LOGIN
@@ -20,7 +24,7 @@ loginEmailBtn.addEventListener("click", () => {
         return;
     }
 
-    auth.signInWithEmailAndPassword(email, pass)
+    signInWithEmailAndPassword(auth, email, pass)
         .then(() => {
             window.location.href = "menu.html";
         })
@@ -32,9 +36,8 @@ loginEmailBtn.addEventListener("click", () => {
 // ======================================================
 //  SE JÁ ESTIVER AUTENTICADO → ENTRA DIRETO
 // ======================================================
-auth.onAuthStateChanged(user => {
+onAuthStateChanged(auth, user => {
     if (user) {
         window.location.href = "menu.html";
     }
 });
-
