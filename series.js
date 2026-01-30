@@ -1,3 +1,5 @@
+import { auth, db } from "./firebase.js";
+
 // ======================================================
 //  ELEMENTOS
 // ======================================================
@@ -314,3 +316,4 @@ pesquisa.addEventListener("input", () => {
         li.style.display = li.innerText.toLowerCase().includes(termo) ? "flex" : "none";
     });
 });
+
