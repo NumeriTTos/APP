@@ -1,4 +1,12 @@
-import { auth, db } from "./firebase.js";
+// ======================================================
+//  IMPORTAR FIREBASE + PROTEÇÃO DE ACESSO
+// ======================================================
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+onAuthStateChanged(auth, user => {
+    if (!user) window.location.href = "index.html";
+});
 
 // ======================================================
 //  ELEMENTOS
@@ -111,7 +119,6 @@ function adicionarItemNaLista(obj, isFixo = false) {
     extraInput.value = textoGuardado;
     li.appendChild(extraInput);
 
-    // Guardar texto sempre que escreve
     extraInput.addEventListener("input", () => {
         if (isFixo) {
             const item = fixos.find(f => f.numero === num && f.valor === val);
@@ -272,7 +279,7 @@ botao.addEventListener("click", e => {
 
     const num = numero.value;
 
-    atualizarTotal(num, valor.value);
+    atualizarTotal(num, parseFloat(valor.value));
     mostrarTotalDoNumero();
 
     adicionarItemNaLista({ numero: num, valor: valor.value, texto: "" }, false);
@@ -303,6 +310,8 @@ apagarTudo.addEventListener("click", () => {
             });
 
             localStorage.removeItem("registos");
+            localStorage.removeItem("totais");
+            totais = {};
             mostrarTotalDoNumero();
         });
 });
@@ -313,7 +322,6 @@ apagarTudo.addEventListener("click", () => {
 pesquisa.addEventListener("input", () => {
     const termo = pesquisa.value.toLowerCase();
     document.querySelectorAll("#lista li").forEach(li => {
-        li.style.display = li.innerText.toLowerCase().includes(termo) ? "flex" : "none";
+        li.style.display = li.textContent.toLowerCase().includes(termo) ? "flex" : "none";
     });
 });
-
