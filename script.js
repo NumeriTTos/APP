@@ -1,3 +1,5 @@
+import { auth, db } from "./firebase.js";
+
 // ======================================================
 //  ELEMENTOS DO LOGIN
 // ======================================================
@@ -35,3 +37,4 @@ auth.onAuthStateChanged(user => {
         window.location.href = "menu.html";
     }
 });
+
