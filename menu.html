@@ -72,55 +72,8 @@
 
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-
-    <!-- Configuração Firebase -->
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAyoIj0xb9Vk-kz0Ln8pwIx7rUcrp_F6aM",
-            authDomain: "wapp-1f195.firebaseapp.com",
-            projectId: "wapp-1f195",
-            storageBucket: "wapp-1f195.firebasestorage.app",
-            messagingSenderId: "1042673353512",
-            appId: "1:1042673353512:web:0a01dd53b9af3fa70b061d"
-        };
-
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-    </script>
-
-    <!-- Script do Menu -->
-    <script>
-        const userNameDiv = document.getElementById("userName");
-        const logoutBtn = document.getElementById("logoutBtn");
-
-        // Proteção: só entra se estiver autenticado
-        auth.onAuthStateChanged(user => {
-            if (!user) {
-                window.location.href = "index.html";
-                return;
-            }
-
-            // Mostrar nome do utilizador
-            userNameDiv.textContent = user.displayName 
-                ? user.displayName 
-                : user.email;
-        });
-
-        // Logout
-        logoutBtn.addEventListener("click", () => {
-            auth.signOut().then(() => {
-                window.location.href = "index.html";
-            });
-        });
-
-     <script type="module" src="menu.js"></script>
-
-     </script>
+    <!-- Carregar o script modular -->
+    <script type="module" src="menu.js"></script>
 
 </body>
 </html>
-
-
