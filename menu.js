@@ -1,4 +1,8 @@
-import { auth, db } from "./firebase.js";
+// ======================================================
+//  IMPORTAR FIREBASE
+// ======================================================
+import { auth } from "./firebase.js";
+import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // ======================================================
 //  ELEMENTOS
@@ -10,7 +14,7 @@ const logoutBtn = document.getElementById("logoutBtn");
 //  PROTEÇÃO DE ACESSO
 //  Se o utilizador não estiver autenticado → volta ao login
 // ======================================================
-auth.onAuthStateChanged(user => {
+onAuthStateChanged(auth, user => {
     if (!user) {
         window.location.href = "index.html";
         return;
@@ -25,9 +29,10 @@ auth.onAuthStateChanged(user => {
 // ======================================================
 //  LOGOUT
 // ======================================================
-logoutBtn.addEventListener("click", () => {
-    auth.signOut().then(() => {
-        window.location.href = "index.html";
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        signOut(auth).then(() => {
+            window.location.href = "index.html";
+        });
     });
-});
-
+}
