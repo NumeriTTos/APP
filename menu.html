@@ -54,6 +54,31 @@
             color: white;
             margin-top: 35px;
         }
+
+        /* ============================
+           BOTÕES DE DIAS
+        ============================ */
+        #dias-container {
+            display: none;              /* invisível por padrão */
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #dias-container .dia-btn {
+            width: 120px;
+            padding: 12px;
+            margin: 8px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        #dias-container .dia-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -65,10 +90,18 @@
 
         <div id="userName">A carregar...</div>
 
-        <button onclick="window.location.href='numeros.html'">Números</button>
-        <button onclick="window.location.href='series.html'">Séries</button>
+        <!-- Botões principais com IDs (sem navegação direta) -->
+        <button id="btn-numeros" type="button">Números</button>
+        <button id="btn-series" type="button">Séries</button>
 
-        <button id="logoutBtn">Terminar Sessão</button>
+        <!-- Botões de escolha de dia (invisíveis até clicar em Números/Séries) -->
+        <div id="dias-container">
+            <button class="dia-btn" data-dia="terca" type="button">Terça</button>
+            <button class="dia-btn" data-dia="quinta" type="button">Quinta</button>
+            <button class="dia-btn" data-dia="sabado" type="button">Sábado</button>
+        </div>
+
+        <button id="logoutBtn" type="button">Terminar Sessão</button>
 
     </div>
 
