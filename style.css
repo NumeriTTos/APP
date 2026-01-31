@@ -1,6 +1,198 @@
 /* ==========================================================
-   LISTA DE REGISTOS — LAYOUT DOS ITENS
+   BASE (Material Design 3)
    ========================================================== */
+:root {
+    --md-primary: #6200ee;
+    --md-primary-light: #bb86fc;
+    --md-primary-dark: #3700b3;
+
+    --md-surface: #ffffff;
+    --md-background: #f2f2f7;
+
+    --md-error: #cf6679;
+    --md-success: #0a8754;
+
+    --md-radius: 14px;
+    --md-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* Impedir scroll lateral */
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* ==========================================================
+   LAYOUT GERAL
+   ========================================================== */
+body {
+    font-family: "Roboto", Arial, sans-serif;
+    background: var(--md-background);
+    margin: 0;
+    padding: 20px;
+
+    font-size: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Container central ampliado */
+.container {
+    width: 100%;
+    max-width: 480px;
+
+    transform: scaleX(1.65) scaleY(1.5);
+    transform-origin: top center;
+}
+
+/* ==========================================================
+   CABEÇALHO DAS PÁGINAS
+   ========================================================== */
+.page-header {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.header-title h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 2em;
+    text-align: center;
+}
+
+.header-title h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2em;
+    color: var(--md-primary-dark);
+    text-align: center;
+}
+
+/* ==========================================================
+   BOTÃO DE REGRESSO
+   ========================================================== */
+.btn-back {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    padding: 6px;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.btn-back:hover {
+    background: rgba(0,0,0,0.08);
+    transform: scale(1.15);
+}
+
+/* ==========================================================
+   TÍTULOS
+   ========================================================== */
+h2, h3 {
+    text-align: center;
+    width: 100%;
+}
+
+/* ==========================================================
+   FORMULÁRIO
+   ========================================================== */
+form {
+    background: var(--md-surface);
+    padding: 20px;
+    border-radius: var(--md-radius);
+    box-shadow: var(--md-shadow);
+    margin-bottom: 25px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+label {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-top: 12px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    padding: 20px;
+    margin-top: 6px;
+    border-radius: var(--md-radius);
+    border: 1px solid #ccc;
+    font-size: 1.4em;
+    background: #fafafa;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+input:focus {
+    border-color: var(--md-primary);
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(98,0,238,0.2);
+}
+
+/* Avisos */
+#aviso {
+    margin: 12px 0;
+    font-weight: 600;
+    min-height: 32px;
+    font-size: 1.2em;
+}
+
+/* ==========================================================
+   BOTÕES PRINCIPAIS
+   ========================================================== */
+button {
+    padding: 20px;
+    border: none;
+    border-radius: var(--md-radius);
+    font-size: 1.4em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#botao {
+    background: var(--md-primary);
+    color: white;
+    margin-top: 10px;
+}
+
+#botao:disabled {
+    background: #c7b7f3;
+    cursor: not-allowed;
+}
+
+#apagarTudo {
+    background: var(--md-error);
+    color: white;
+    margin-top: 20px;
+}
+
+/* ==========================================================
+   LISTA DE REGISTOS
+   ========================================================== */
+ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
 li {
     background: var(--md-surface);
     padding: 16px;
@@ -29,8 +221,6 @@ li .info {
 /* ==========================================================
    BOTÕES DA LISTA
    ========================================================== */
-
-/* Botão X */
 li button.apagar {
     background: var(--md-error);
     color: white;
@@ -45,7 +235,6 @@ li button.apagar {
     justify-content: center;
 }
 
-/* Botão 📌 fixar */
 li button.btn-fixo {
     background: var(--md-primary);
     color: white;
@@ -59,7 +248,6 @@ li button.btn-fixo {
     justify-content: center;
 }
 
-/* Botão ✓ desfazer fixo */
 li button.desfazer-fixo {
     background: var(--md-success);
     color: white;
@@ -73,7 +261,6 @@ li button.desfazer-fixo {
     justify-content: center;
 }
 
-/* Botão "Normal" (laranja) */
 li button.remover {
     background: #ff9800;
     color: white;
