@@ -1,3 +1,12 @@
+/* ==========================================================
+   LISTA DE REGISTOS — LAYOUT DOS ITENS
+   ========================================================== */
+li {
+    background: var(--md-surface);
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: var(--md-radius);
+    box-shadow: var(--md-shadow);
 
     display: flex;
     align-items: center;
@@ -40,11 +49,11 @@ li button.apagar {
 li button.btn-fixo {
     background: var(--md-primary);
     color: white;
+    width: 28px;
+    height: 28px;
     padding: 0;
     font-size: 0.45em;
     border-radius: 6px;
-    width: 28px;
-    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -150,7 +159,7 @@ li .extra-input {
 }
 
 /* ==========================================================
-   BOTÕES DE DIAS (NOVO)
+   BOTÕES DE DIAS
    ========================================================== */
 #dias-container {
     display: none;
