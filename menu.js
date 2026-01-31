@@ -19,6 +19,11 @@ import {
 const userNameDiv = document.getElementById("userName");
 const logoutBtn = document.getElementById("logoutBtn");
 
+const btnNumeros = document.getElementById("btn-numeros");
+const btnSeries = document.getElementById("btn-series");
+const diasContainer = document.getElementById("dias-container");
+const diaBtns = document.querySelectorAll(".dia-btn");
+
 // ======================================================
 //  PROTEÇÃO DE ACESSO + BUSCAR NOME DO FIRESTORE
 // ======================================================
@@ -31,25 +36,17 @@ onAuthStateChanged(auth, async user => {
     let nome = "";
 
     try {
-        // Procurar na coleção "users" pelo campo "email" igual ao email do utilizador autenticado
         const usersRef = collection(db, "users");
         const q = query(usersRef, where("email", "==", user.email));
         const snap = await getDocs(q);
 
         if (!snap.empty) {
             const dados = snap.docs[0].data();
-            if (dados.nome) {
-                nome = dados.nome;
-            }
+            if (dados.nome) nome = dados.nome;
         }
 
-        // Se ainda não tiver nome, usar displayName ou parte do email
         if (!nome) {
-            if (user.displayName) {
-                nome = user.displayName;
-            } else {
-                nome = user.email.split("@")[0];
-            }
+            nome = user.displayName || user.email.split("@")[0];
         }
 
     } catch (err) {
@@ -58,6 +55,41 @@ onAuthStateChanged(auth, async user => {
     }
 
     userNameDiv.textContent = nome;
+});
+
+// ======================================================
+//  MOSTRAR BOTÕES DE DIAS
+// ======================================================
+if (btnNumeros) {
+    btnNumeros.addEventListener("click", () => {
+        diasContainer.style.display = "block";
+        localStorage.setItem("tipoRegisto", "numeros");
+    });
+}
+
+if (btnSeries) {
+    btnSeries.addEventListener("click", () => {
+        diasContainer.style.display = "block";
+        localStorage.setItem("tipoRegisto", "series");
+    });
+}
+
+// ======================================================
+//  SELECIONAR DIA E REDIRECIONAR
+// ======================================================
+diaBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const dia = btn.dataset.dia;
+        const tipo = localStorage.getItem("tipoRegisto");
+
+        localStorage.setItem("diaSelecionado", dia);
+
+        if (tipo === "numeros") {
+            window.location.href = "numeros.html";
+        } else if (tipo === "series") {
+            window.location.href = "series.html";
+        }
+    });
 });
 
 // ======================================================
