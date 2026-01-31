@@ -1,5 +1,5 @@
 // ======================================================
-//  IMPORTAR FIREBASE + PROTEÇÃO DE ACESSO
+//  1. FIREBASE + PROTEÇÃO DE ACESSO
 // ======================================================
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -9,7 +9,7 @@ onAuthStateChanged(auth, user => {
 });
 
 // ======================================================
-//  ELEMENTOS
+//  2. ELEMENTOS DO DOM
 // ======================================================
 const numero = document.getElementById("numero");
 const valor = document.getElementById("valor");
@@ -23,7 +23,7 @@ const pesquisa = document.getElementById("pesquisa");
 let acabouDeRegistar = false;
 
 // ======================================================
-//  POPUP MODERNO
+//  3. POPUP MODERNO
 // ======================================================
 function mostrarPopupConfirmacao(mensagem) {
     return new Promise(resolve => {
@@ -41,7 +41,7 @@ function mostrarPopupConfirmacao(mensagem) {
 }
 
 // ======================================================
-//  LOCALSTORAGE
+//  4. LOCALSTORAGE
 // ======================================================
 let fixos = JSON.parse(localStorage.getItem("fixos")) || [];
 let totais = JSON.parse(localStorage.getItem("totais")) || {};
@@ -63,7 +63,7 @@ function guardarFixos() {
 }
 
 // ======================================================
-//  TOTAIS
+//  5. TOTAIS
 // ======================================================
 function totalDoNumero(num) {
     return totais[num] ? parseFloat(totais[num]) : 0;
@@ -81,7 +81,7 @@ function mostrarTotalDoNumero() {
 }
 
 // ======================================================
-//  CARREGAR LISTA AO INICIAR
+//  6. CARREGAR LISTA AO INICIAR
 // ======================================================
 window.addEventListener("load", () => {
     fixos.forEach(item => adicionarItemNaLista(item, true));
@@ -91,7 +91,7 @@ window.addEventListener("load", () => {
 });
 
 // ======================================================
-//  ADICIONAR ITEM À LISTA
+//  7. ADICIONAR ITEM À LISTA
 // ======================================================
 function adicionarItemNaLista(obj, isFixo = false) {
 
@@ -198,7 +198,7 @@ function adicionarItemNaLista(obj, isFixo = false) {
 }
 
 // ======================================================
-//  VALIDAÇÕES
+//  8. VALIDAÇÕES
 // ======================================================
 numero.addEventListener("input", () => {
     numero.value = numero.value.replace(/[^0-9]/g, "").slice(0, 3);
@@ -259,7 +259,7 @@ function erro(msg) {
 }
 
 // ======================================================
-//  ENTER → CONFIRMAR
+//  9. ENTER → CONFIRMAR
 // ======================================================
 document.addEventListener("keydown", e => {
     if (e.key === "Enter") {
@@ -269,7 +269,7 @@ document.addEventListener("keydown", e => {
 });
 
 // ======================================================
-//  REGISTAR ITEM
+// 10. REGISTAR ITEM
 // ======================================================
 botao.addEventListener("click", e => {
     e.preventDefault();
@@ -297,7 +297,7 @@ botao.addEventListener("click", e => {
 });
 
 // ======================================================
-//  APAGAR LISTA COMPLETA
+// 11. APAGAR LISTA COMPLEta
 // ======================================================
 apagarTudo.addEventListener("click", () => {
     mostrarPopupConfirmacao("Tem a certeza que deseja apagar TODOS os números?")
@@ -317,7 +317,7 @@ apagarTudo.addEventListener("click", () => {
 });
 
 // ======================================================
-//  PESQUISA
+// 12. PESQUISA
 // ======================================================
 pesquisa.addEventListener("input", () => {
     const termo = pesquisa.value.toLowerCase();
