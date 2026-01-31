@@ -29,20 +29,18 @@ onAuthStateChanged(auth, async user => {
     let nome = "";
 
     try {
-        // 1. Buscar documento do utilizador no Firestore
         const ref = doc(db, "users", user.uid);
         const snap = await getDoc(ref);
 
         if (snap.exists() && snap.data().nome) {
-            nome = snap.data().nome; // nome vindo da coleção users
+            nome = snap.data().nome;
         } else if (user.displayName) {
-            nome = user.displayName; // nome do Firebase Auth
+            nome = user.displayName;
         } else {
-            nome = user.email.split("@")[0]; // fallback bonito
+            nome = user.email.split("@")[0];
         }
 
     } catch (err) {
-        // Se der erro, usa fallback
         nome = user.displayName || user.email.split("@")[0];
     }
 
