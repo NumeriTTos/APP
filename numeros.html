@@ -22,6 +22,9 @@
 
         <h2>NumeriTTos</h2>
 
+        <!-- DIA ESCOLHIDO -->
+        <h3 id="diaSelecionado"></h3>
+
         <!-- FORMULÁRIO PRINCIPAL -->
         <form novalidate>
             <label for="numero">Número (3 dígitos):</label>
@@ -63,6 +66,23 @@
 
     <!-- Script principal -->
     <script type="module" src="numeros.js"></script>
+
+    <!-- Script para mostrar o dia escolhido -->
+    <script>
+        const dia = localStorage.getItem("diaEscolhido");
+        const campoDia = document.getElementById("diaSelecionado");
+
+        if (dia) {
+            const nomes = {
+                terca: "Terça",
+                quinta: "Quinta",
+                sabado: "Sábado"
+            };
+            campoDia.textContent = "Dia: " + (nomes[dia] || dia);
+        } else {
+            campoDia.textContent = "";
+        }
+    </script>
 
 </body>
 </html>
