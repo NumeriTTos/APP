@@ -2,13 +2,15 @@
 //  IMPORTAR FIREBASE
 // ======================================================
 import { auth, db } from "./firebase.js";
-import { 
-    signOut, 
-    onAuthStateChanged 
+import {
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { 
-    doc, 
-    getDoc 
+import {
+    collection,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // ======================================================
@@ -29,18 +31,29 @@ onAuthStateChanged(auth, async user => {
     let nome = "";
 
     try {
-        const ref = doc(db, "users", user.uid);
-        const snap = await getDoc(ref);
+        // Procurar na coleção "users" pelo campo "email" igual ao email do utilizador autenticado
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", user.email));
+        const snap = await getDocs(q);
 
-        if (snap.exists() && snap.data().nome) {
-            nome = snap.data().nome;
-        } else if (user.displayName) {
-            nome = user.displayName;
-        } else {
-            nome = user.email.split("@")[0];
+        if (!snap.empty) {
+            const dados = snap.docs[0].data();
+            if (dados.nome) {
+                nome = dados.nome;
+            }
+        }
+
+        // Se ainda não tiver nome, usar displayName ou parte do email
+        if (!nome) {
+            if (user.displayName) {
+                nome = user.displayName;
+            } else {
+                nome = user.email.split("@")[0];
+            }
         }
 
     } catch (err) {
+        console.error("Erro ao buscar nome no Firestore:", err);
         nome = user.displayName || user.email.split("@")[0];
     }
 
