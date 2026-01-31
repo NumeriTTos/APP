@@ -13,6 +13,7 @@
 
 <body>
 
+    <!-- Botão de voltar -->
     <button class="btn-back" onclick="window.history.back()">
         ↩
     </button>
@@ -21,6 +22,7 @@
 
         <h2>NumeriTTos</h2>
 
+        <!-- FORMULÁRIO PRINCIPAL -->
         <form novalidate>
             <label for="numero">Número (3 dígitos):</label>
             <input type="text" id="numero" maxlength="3" autocomplete="off" inputmode="numeric">
@@ -33,9 +35,10 @@
             <button id="botao" type="submit" disabled>Marcar</button>
         </form>
 
-        <!-- Mantido para o script funcionar, mas invisível -->
+        <!-- Mantido para compatibilidade com o JS -->
         <span id="totalGlobal" style="display:none;">0.00</span>
 
+        <!-- PESQUISA -->
         <label for="pesquisa">Pesquisar:</label>
         <input type="text" id="pesquisa" autocomplete="off" placeholder="Procurar número ou valor">
 
