@@ -5,8 +5,6 @@
     <title>NumeriTTos — Menu</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <!-- Usa o CSS existente -->
     <link rel="stylesheet" href="style.css">
 
     <style>
@@ -59,7 +57,7 @@
            BOTÕES DE DIAS
         ============================ */
         #dias-container {
-            display: none;              /* invisível por padrão */
+            display: none;
             margin-top: 20px;
             text-align: center;
         }
@@ -90,11 +88,11 @@
 
         <div id="userName">A carregar...</div>
 
-        <!-- Botões principais com IDs (sem navegação direta) -->
+        <!-- Botões principais -->
         <button id="btn-numeros" type="button">Números</button>
         <button id="btn-series" type="button">Séries</button>
 
-        <!-- Botões de escolha de dia (invisíveis até clicar em Números/Séries) -->
+        <!-- Botões de escolha de dia -->
         <div id="dias-container">
             <button class="dia-btn" data-dia="terca" type="button">Terça</button>
             <button class="dia-btn" data-dia="quinta" type="button">Quinta</button>
@@ -105,8 +103,31 @@
 
     </div>
 
-    <!-- Carregar o script modular -->
+    <!-- Script principal -->
     <script type="module" src="menu.js"></script>
+
+    <!-- Script para guardar o dia escolhido -->
+    <script>
+        let destino = null;
+
+        document.getElementById("btn-numeros").addEventListener("click", () => {
+            destino = "numeros.html";
+            document.getElementById("dias-container").style.display = "block";
+        });
+
+        document.getElementById("btn-series").addEventListener("click", () => {
+            destino = "series.html";
+            document.getElementById("dias-container").style.display = "block";
+        });
+
+        document.querySelectorAll(".dia-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const dia = btn.dataset.dia;
+                localStorage.setItem("diaEscolhido", dia);
+                if (destino) window.location.href = destino;
+            });
+        });
+    </script>
 
 </body>
 </html>
