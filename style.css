@@ -323,4 +323,29 @@ li .extra-input {
     flex: 1;
 }
 
+/* ==========================================================
+   BOTÕES DE DIAS (NOVO)
+   ========================================================== */
+#dias-container {
+    display: none;
+    margin-top: 20px;
+    text-align: center;
+}
 
+#dias-container .dia-btn {
+    width: 140px;
+    padding: 14px;
+    margin: 10px;
+    font-size: 1.2em;
+    border-radius: var(--md-radius);
+    border: none;
+    background: var(--md-primary);
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#dias-container .dia-btn:hover {
+    background: var(--md-primary-dark);
+    transform: scale(1.05);
+}
