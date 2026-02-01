@@ -376,17 +376,18 @@ botao.addEventListener("click", async e => {
 
     adicionarItemNaLista({ numero: num, valor: valor.value, texto: "" }, false);
 
-    await guardarNumeroFirestore(num, valor.value, "";
+   await guardarNumeroFirestore(num, valor.value, "");
 
-    acabouDeRegistar = true;
+   acabouDeRegistar = true;
 
-    aviso.textContent = "✔️ Registado com sucesso!";
-    aviso.style.color = "green";
+   aviso.textContent = "✔️ Registado com sucesso!";
+   aviso.style.color = "green";
 
-    numero.value = "";
-    valor.value = "";
-    numero.focus();
-    botao.disabled = true;
+   numero.value = "";
+   valor.value = "";
+   numero.focus();
+   botao.disabled = true;
+
 });
 
 // ======================================================
@@ -417,3 +418,4 @@ pesquisa.addEventListener("input", () => {
         li.style.display = li.textContent.toLowerCase().includes(termo) ? "flex" : "none";
     });
 });
+
