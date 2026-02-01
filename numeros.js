@@ -14,12 +14,18 @@ import {
 
 let currentUser = null;
 
-onAuthStateChanged(auth, user => {
+// 🔥 Garantir user + carregar dados Firestore só depois de autenticado
+onAuthStateChanged(auth, async user => {
     if (!user) {
         window.location.href = "index.html";
         return;
     }
+
     currentUser = user;
+
+    await carregarTotaisFirestore();
+    await carregarFixosFirestore();
+    await carregarNumerosFirestore();
 });
 
 // ======================================================
@@ -187,16 +193,7 @@ function mostrarTotalDoNumero() {
 }
 
 // ======================================================
-// 9. CARREGAR LISTA AO INICIAR
-// ======================================================
-window.addEventListener("load", async () => {
-    await carregarTotaisFirestore();
-    await carregarFixosFirestore();
-    await carregarNumerosFirestore();
-});
-
-// ======================================================
-// 10. ADICIONAR ITEM À LISTA
+// 9. ADICIONAR ITEM À LISTA
 // ======================================================
 function adicionarItemNaLista(obj, isFixo = false) {
 
@@ -291,7 +288,7 @@ function adicionarItemNaLista(obj, isFixo = false) {
 }
 
 // ======================================================
-// 11. VALIDAÇÕES
+// 10. VALIDAÇÕES
 // ======================================================
 numero.addEventListener("input", () => {
     numero.value = numero.value.replace(/[^0-9]/g, "").slice(0, 3);
@@ -352,7 +349,7 @@ function erro(msg) {
 }
 
 // ======================================================
-// 12. ENTER → CONFIRMAR
+// 11. ENTER → CONFIRMAR
 // ======================================================
 document.addEventListener("keydown", e => {
     if (e.key === "Enter") {
@@ -362,7 +359,7 @@ document.addEventListener("keydown", e => {
 });
 
 // ======================================================
-// 13. REGISTAR ITEM
+// 12. REGISTAR ITEM
 // ======================================================
 botao.addEventListener("click", async e => {
     e.preventDefault();
@@ -391,7 +388,7 @@ botao.addEventListener("click", async e => {
 });
 
 // ======================================================
-// 14. APAGAR LISTA COMPLETA
+// 13. APAGAR LISTA COMPLETA
 // ======================================================
 apagarTudo.addEventListener("click", () => {
     mostrarPopupConfirmacao("Tem a certeza que deseja apagar TODOS os números?")
@@ -410,7 +407,7 @@ apagarTudo.addEventListener("click", () => {
 });
 
 // ======================================================
-// 15. PESQUISA
+// 14. PESQUISA
 // ======================================================
 pesquisa.addEventListener("input", () => {
     const termo = pesquisa.value.toLowerCase();
