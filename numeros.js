@@ -160,7 +160,6 @@ async function carregarTotaisFirestore() {
     snap.forEach(docSnap => {
         const item = docSnap.data();
         const total = parseFloat(item.total);
-        // proteção contra undefined/NaN
         totais[item.numero] = isNaN(total) ? 0 : total;
     });
 }
@@ -173,6 +172,20 @@ async function limparTotaisFirestore() {
     snap.forEach(docSnap => {
         promises.push(deleteDoc(doc(db, "users", currentUser.uid, "totais", docSnap.id)));
     });
+    await Promise.all(promises);
+}
+
+// 🔥 NOVO — APAGAR NÚMEROS DA FIRESTORE
+async function limparNumerosFirestore() {
+    if (!currentUser) return;
+
+    const snap = await getDocs(collection(db, "users", currentUser.uid, "numeros"));
+    const promises = [];
+
+    snap.forEach(docSnap => {
+        promises.push(deleteDoc(doc(db, "users", currentUser.uid, "numeros", docSnap.id)));
+    });
+
     await Promise.all(promises);
 }
 
@@ -402,8 +415,11 @@ apagarTudo.addEventListener("click", () => {
                 li.remove();
             });
 
-            totais = {};
+            // 🔥 AGORA APAGA TUDO NO FIRESTORE
+            await limparNumerosFirestore();
             await limparTotaisFirestore();
+
+            totais = {};
             mostrarTotalDoNumero();
         });
 });
