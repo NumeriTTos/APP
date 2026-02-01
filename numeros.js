@@ -159,7 +159,9 @@ async function carregarTotaisFirestore() {
 
     snap.forEach(docSnap => {
         const item = docSnap.data();
-        totais[item.numero] = item.total;
+        const total = parseFloat(item.total);
+        // garantir que nunca entra undefined/NaN
+        totais[item.numero] = isNaN(total) ? 0 : total;
     });
 }
 
@@ -182,7 +184,7 @@ function totalDoNumero(num) {
 }
 
 function atualizarTotal(num, valor) {
-    if (!totais[num]) totais[num] = 0;
+    if (isNaN(parseFloat(totais[num]))) totais[num] = 0;
     totais[num] = parseFloat(totais[num]) + parseFloat(valor);
     atualizarTotalFirestore(num, totais[num]);
 }
@@ -374,7 +376,7 @@ botao.addEventListener("click", async e => {
 
     adicionarItemNaLista({ numero: num, valor: valor.value, texto: "" }, false);
 
-    await guardarNumeroFirestore(num, valor.value, "");
+    await guardarNumeroFirestore(num, valor.value, "";
 
     acabouDeRegistar = true;
 
