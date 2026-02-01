@@ -6,7 +6,10 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/fi
 import {
     collection,
     addDoc,
-    getDocs
+    getDocs,
+    doc,
+    setDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 let currentUser = null;
@@ -52,29 +55,82 @@ function mostrarPopupConfirmacao(mensagem) {
 }
 
 // ======================================================
-// 4. LOCALSTORAGE (A SER SUBSTITUÍDO POR FIRESTORE)
+// 4. LOCALSTORAGE (APENAS PARA TOTAIS POR ENQUANTO)
 // ======================================================
-let fixos = JSON.parse(localStorage.getItem("fixos")) || [];
-let totais = JSON.parse(localStorage.getItem("totais")) || {};
+let totais = JSON.parse(localStorage.getItem("totais")) || [];
 
-function guardarLista() {
-    const itens = [];
-    document.querySelectorAll("#lista li:not(.fixo)").forEach(li => {
-        itens.push({
-            numero: li.dataset.numero,
-            valor: li.dataset.valor,
-            texto: li.querySelector(".extra-input").value || ""
-        });
+// ======================================================
+// 5. FIRESTORE — FIXOS
+// ======================================================
+async function guardarFixoFirestore(num, valor, texto) {
+    if (!currentUser) return;
+
+    const ref = doc(db, "users", currentUser.uid, "fixos", `${num}_${valor}`);
+
+    await setDoc(ref, {
+        numero: num,
+        valor: valor,
+        texto: texto,
+        timestamp: Date.now()
     });
-    localStorage.setItem("registos", JSON.stringify(itens));
 }
 
-function guardarFixos() {
-    localStorage.setItem("fixos", JSON.stringify(fixos));
+async function carregarFixosFirestore() {
+    if (!currentUser) return;
+
+    const snap = await getDocs(collection(db, "users", currentUser.uid, "fixos"));
+
+    snap.forEach(docSnap => {
+        const item = docSnap.data();
+        adicionarItemNaLista({
+            numero: item.numero,
+            valor: item.valor,
+            texto: item.texto || ""
+        }, true);
+    });
+}
+
+async function apagarFixoFirestore(num, valor) {
+    if (!currentUser) return;
+
+    const ref = doc(db, "users", currentUser.uid, "fixos", `${num}_${valor}`);
+    await deleteDoc(ref);
 }
 
 // ======================================================
-// 5. TOTAIS
+// 6. FIRESTORE — NÚMEROS
+// ======================================================
+async function guardarNumeroFirestore(num, valor, texto) {
+    if (!currentUser) return;
+
+    await addDoc(
+        collection(db, "users", currentUser.uid, "numeros"),
+        {
+            numero: num,
+            valor: valor,
+            texto: texto,
+            timestamp: Date.now()
+        }
+    );
+}
+
+async function carregarNumerosFirestore() {
+    if (!currentUser) return;
+
+    const snap = await getDocs(collection(db, "users", currentUser.uid, "numeros"));
+
+    snap.forEach(docSnap => {
+        const item = docSnap.data();
+        adicionarItemNaLista({
+            numero: item.numero,
+            valor: item.valor,
+            texto: item.texto || ""
+        }, false);
+    });
+}
+
+// ======================================================
+// 7. TOTAIS
 // ======================================================
 function totalDoNumero(num) {
     return totais[num] ? parseFloat(totais[num]) : 0;
@@ -92,18 +148,15 @@ function mostrarTotalDoNumero() {
 }
 
 // ======================================================
-// 6. CARREGAR LISTA AO INICIAR (AGORA COM FIRESTORE)
+// 8. CARREGAR LISTA AO INICIAR
 // ======================================================
 window.addEventListener("load", async () => {
-    // Carregar fixos (por enquanto ainda do localStorage)
-    fixos.forEach(item => adicionarItemNaLista(item, true));
-
-    // Carregar números do Firestore
+    await carregarFixosFirestore();
     await carregarNumerosFirestore();
 });
 
 // ======================================================
-// 7. ADICIONAR ITEM À LISTA
+// 9. ADICIONAR ITEM À LISTA
 // ======================================================
 function adicionarItemNaLista(obj, isFixo = false) {
 
@@ -133,11 +186,7 @@ function adicionarItemNaLista(obj, isFixo = false) {
 
     extraInput.addEventListener("input", () => {
         if (isFixo) {
-            const item = fixos.find(f => f.numero === num && f.valor === val);
-            if (item) item.texto = extraInput.value;
-            guardarFixos();
-        } else {
-            guardarLista();
+            guardarFixoFirestore(num, val, extraInput.value);
         }
     });
 
@@ -155,10 +204,7 @@ function adicionarItemNaLista(obj, isFixo = false) {
                 atualizarTotal(num, -parseFloat(val));
 
                 if (isFixo) {
-                    fixos = fixos.filter(f => !(f.numero === num && f.valor === val));
-                    guardarFixos();
-                } else {
-                    guardarLista();
+                    apagarFixoFirestore(num, val);
                 }
 
                 mostrarTotalDoNumero();
@@ -174,12 +220,9 @@ function adicionarItemNaLista(obj, isFixo = false) {
         btnFixo.className = "btn-fixo";
 
         btnFixo.addEventListener("click", () => {
-            fixos.push({ numero: num, valor: val, texto: extraInput.value });
-            guardarFixos();
+            guardarFixoFirestore(num, val, extraInput.value);
 
             li.remove();
-            guardarLista();
-
             adicionarItemNaLista({ numero: num, valor: val, texto: extraInput.value }, true);
             mostrarTotalDoNumero();
         });
@@ -194,12 +237,10 @@ function adicionarItemNaLista(obj, isFixo = false) {
         btnDesfazer.className = "desfazer-fixo";
 
         btnDesfazer.addEventListener("click", () => {
-            fixos = fixos.filter(f => !(f.numero === num && f.valor === val));
-            guardarFixos();
+            apagarFixoFirestore(num, val);
 
             li.remove();
             adicionarItemNaLista({ numero: num, valor: val, texto: extraInput.value }, false);
-            guardarLista();
             mostrarTotalDoNumero();
         });
 
@@ -210,7 +251,7 @@ function adicionarItemNaLista(obj, isFixo = false) {
 }
 
 // ======================================================
-// 8. VALIDAÇÕES
+// 10. VALIDAÇÕES
 // ======================================================
 numero.addEventListener("input", () => {
     numero.value = numero.value.replace(/[^0-9]/g, "").slice(0, 3);
@@ -271,7 +312,7 @@ function erro(msg) {
 }
 
 // ======================================================
-// 9. ENTER → CONFIRMAR
+// 11. ENTER → CONFIRMAR
 // ======================================================
 document.addEventListener("keydown", e => {
     if (e.key === "Enter") {
@@ -281,41 +322,7 @@ document.addEventListener("keydown", e => {
 });
 
 // ======================================================
-// 10. FIRESTORE: GUARDAR + LER
-// ======================================================
-async function guardarNumeroFirestore(num, valor, texto) {
-    if (!currentUser) return;
-
-    await addDoc(
-        collection(db, "users", currentUser.uid, "numeros"),
-        {
-            numero: num,
-            valor: valor,
-            texto: texto,
-            timestamp: Date.now()
-        }
-    );
-}
-
-async function carregarNumerosFirestore() {
-    if (!currentUser) return;
-
-    const snap = await getDocs(
-        collection(db, "users", currentUser.uid, "numeros")
-    );
-
-    snap.forEach(doc => {
-        const item = doc.data();
-        adicionarItemNaLista({
-            numero: item.numero,
-            valor: item.valor,
-            texto: item.texto || ""
-        }, false);
-    });
-}
-
-// ======================================================
-// 11. REGISTAR ITEM
+// 12. REGISTAR ITEM
 // ======================================================
 botao.addEventListener("click", async e => {
     e.preventDefault();
@@ -329,7 +336,6 @@ botao.addEventListener("click", async e => {
     mostrarTotalDoNumero();
 
     adicionarItemNaLista({ numero: num, valor: valor.value, texto: "" }, false);
-    guardarLista();
 
     await guardarNumeroFirestore(num, valor.value, "");
 
@@ -345,7 +351,7 @@ botao.addEventListener("click", async e => {
 });
 
 // ======================================================
-// 12. APAGAR LISTA COMPLETA
+// 13. APAGAR LISTA COMPLETA
 // ======================================================
 apagarTudo.addEventListener("click", () => {
     mostrarPopupConfirmacao("Tem a certeza que deseja apagar TODOS os números?")
@@ -357,7 +363,6 @@ apagarTudo.addEventListener("click", () => {
                 li.remove();
             });
 
-            localStorage.removeItem("registos");
             localStorage.removeItem("totais");
             totais = {};
             mostrarTotalDoNumero();
@@ -365,7 +370,7 @@ apagarTudo.addEventListener("click", () => {
 });
 
 // ======================================================
-// 13. PESQUISA
+// 14. PESQUISA
 // ======================================================
 pesquisa.addEventListener("input", () => {
     const termo = pesquisa.value.toLowerCase();
