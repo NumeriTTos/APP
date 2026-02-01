@@ -1,11 +1,21 @@
 // ======================================================
 // 1. FIREBASE + PROTEÇÃO DE ACESSO
 // ======================================================
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+let currentUser = null;
 
 onAuthStateChanged(auth, user => {
-    if (!user) window.location.href = "index.html";
+    if (!user) {
+        window.location.href = "index.html";
+        return;
+    }
+    currentUser = user;
 });
 
 // ======================================================
@@ -269,9 +279,23 @@ document.addEventListener("keydown", e => {
 });
 
 // ======================================================
-// 10. REGISTAR ITEM
+// 10. REGISTAR ITEM (AGORA TAMBÉM GUARDA NO FIRESTORE)
 // ======================================================
-botao.addEventListener("click", e => {
+async function guardarNumeroFirestore(num, valor, texto) {
+    if (!currentUser) return;
+
+    await addDoc(
+        collection(db, "users", currentUser.uid, "numeros"),
+        {
+            numero: num,
+            valor: valor,
+            texto: texto,
+            timestamp: Date.now()
+        }
+    );
+}
+
+botao.addEventListener("click", async e => {
     e.preventDefault();
 
     let val = parseFloat(valor.value);
@@ -284,6 +308,9 @@ botao.addEventListener("click", e => {
 
     adicionarItemNaLista({ numero: num, valor: valor.value, texto: "" }, false);
     guardarLista();
+
+    // 🔥 Guardar no Firestore
+    await guardarNumeroFirestore(num, valor.value, "");
 
     acabouDeRegistar = true;
 
