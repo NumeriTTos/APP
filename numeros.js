@@ -5,7 +5,8 @@ import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
     collection,
-    addDoc
+    addDoc,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 let currentUser = null;
@@ -91,13 +92,14 @@ function mostrarTotalDoNumero() {
 }
 
 // ======================================================
-// 6. CARREGAR LISTA AO INICIAR
+// 6. CARREGAR LISTA AO INICIAR (AGORA COM FIRESTORE)
 // ======================================================
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
+    // Carregar fixos (por enquanto ainda do localStorage)
     fixos.forEach(item => adicionarItemNaLista(item, true));
 
-    const dados = JSON.parse(localStorage.getItem("registos")) || [];
-    dados.forEach(item => adicionarItemNaLista(item, false));
+    // Carregar números do Firestore
+    await carregarNumerosFirestore();
 });
 
 // ======================================================
@@ -279,7 +281,7 @@ document.addEventListener("keydown", e => {
 });
 
 // ======================================================
-// 10. REGISTAR ITEM (AGORA TAMBÉM GUARDA NO FIRESTORE)
+// 10. FIRESTORE: GUARDAR + LER
 // ======================================================
 async function guardarNumeroFirestore(num, valor, texto) {
     if (!currentUser) return;
@@ -295,6 +297,26 @@ async function guardarNumeroFirestore(num, valor, texto) {
     );
 }
 
+async function carregarNumerosFirestore() {
+    if (!currentUser) return;
+
+    const snap = await getDocs(
+        collection(db, "users", currentUser.uid, "numeros")
+    );
+
+    snap.forEach(doc => {
+        const item = doc.data();
+        adicionarItemNaLista({
+            numero: item.numero,
+            valor: item.valor,
+            texto: item.texto || ""
+        }, false);
+    });
+}
+
+// ======================================================
+// 11. REGISTAR ITEM
+// ======================================================
 botao.addEventListener("click", async e => {
     e.preventDefault();
 
@@ -309,7 +331,6 @@ botao.addEventListener("click", async e => {
     adicionarItemNaLista({ numero: num, valor: valor.value, texto: "" }, false);
     guardarLista();
 
-    // 🔥 Guardar no Firestore
     await guardarNumeroFirestore(num, valor.value, "");
 
     acabouDeRegistar = true;
@@ -324,7 +345,7 @@ botao.addEventListener("click", async e => {
 });
 
 // ======================================================
-// 11. APAGAR LISTA COMPLETA
+// 12. APAGAR LISTA COMPLETA
 // ======================================================
 apagarTudo.addEventListener("click", () => {
     mostrarPopupConfirmacao("Tem a certeza que deseja apagar TODOS os números?")
@@ -344,7 +365,7 @@ apagarTudo.addEventListener("click", () => {
 });
 
 // ======================================================
-// 12. PESQUISA
+// 13. PESQUISA
 // ======================================================
 pesquisa.addEventListener("input", () => {
     const termo = pesquisa.value.toLowerCase();
