@@ -160,7 +160,7 @@ async function carregarTotaisFirestore() {
     snap.forEach(docSnap => {
         const item = docSnap.data();
         const total = parseFloat(item.total);
-        // garantir que nunca entra undefined/NaN
+        // proteção contra undefined/NaN
         totais[item.numero] = isNaN(total) ? 0 : total;
     });
 }
@@ -294,7 +294,7 @@ function adicionarItemNaLista(obj, isFixo = false) {
 // ======================================================
 numero.addEventListener("input", () => {
     numero.value = numero.value.replace(/[^0-9]/g, "").slice(0, 3);
-    if (numero.value.length === 3) valor.focus();
+    if (numero.value.length === 3) valor.focus();   // salto automático
     mostrarTotalDoNumero();
     validarTudo();
 });
@@ -376,18 +376,17 @@ botao.addEventListener("click", async e => {
 
     adicionarItemNaLista({ numero: num, valor: valor.value, texto: "" }, false);
 
-   await guardarNumeroFirestore(num, valor.value, "");
+    await guardarNumeroFirestore(num, valor.value, "");
 
-   acabouDeRegistar = true;
+    acabouDeRegistar = true;
 
-   aviso.textContent = "✔️ Registado com sucesso!";
-   aviso.style.color = "green";
+    aviso.textContent = "✔️ Registado com sucesso!";
+    aviso.style.color = "green";
 
-   numero.value = "";
-   valor.value = "";
-   numero.focus();
-   botao.disabled = true;
-
+    numero.value = "";
+    valor.value = "";
+    numero.focus();
+    botao.disabled = true;
 });
 
 // ======================================================
@@ -418,4 +417,3 @@ pesquisa.addEventListener("input", () => {
         li.style.display = li.textContent.toLowerCase().includes(termo) ? "flex" : "none";
     });
 });
-
