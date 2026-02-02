@@ -1,133 +1,32 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <title>NumeriTTos — Menu</title>
+<script>
+    let destino = null;
 
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    document.getElementById("btn-numeros").addEventListener("click", () => {
+        destino = "numeros"; // agora é apenas um identificador
+        document.getElementById("dias-container").style.display = "block";
+    });
 
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    document.getElementById("btn-series").addEventListener("click", () => {
+        destino = "series"; // se tiveres páginas por dia para séries
+        document.getElementById("dias-container").style.display = "block";
+    });
 
-        .menu-container {
-            width: 100%;
-            max-width: 480px;
-            background: var(--md-surface);
-            padding: 40px;
-            border-radius: var(--md-radius);
-            box-shadow: var(--md-shadow);
-            transform: scaleX(1.4) scaleY(1.3);
-            transform-origin: center;
-            text-align: center;
-        }
+    document.querySelectorAll(".dia-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const dia = btn.dataset.dia;
+            localStorage.setItem("diaEscolhido", dia);
 
-        h2 {
-            margin-bottom: 20px;
-            color: var(--md-primary);
-            font-size: 2.2em;
-        }
+            if (destino === "numeros") {
+                if (dia === "terca") window.location.href = "terca.html";
+                if (dia === "quinta") window.location.href = "quinta.html";
+                if (dia === "sabado") window.location.href = "sabado.html";
+            }
 
-        #userName {
-            font-size: 1.4em;
-            margin-bottom: 30px;
-            font-weight: 500;
-        }
-
-        button {
-            width: 100%;
-            padding: 18px;
-            margin-top: 15px;
-            font-size: 1.3em;
-            border-radius: 10px;
-        }
-
-        #logoutBtn {
-            background: #d32f2f;
-            color: white;
-            margin-top: 35px;
-        }
-
-        /* ============================
-           BOTÕES DE DIAS
-        ============================ */
-        #dias-container {
-            display: none;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        #dias-container .dia-btn {
-            width: 120px;
-            padding: 12px;
-            margin: 8px;
-            font-size: 1.1em;
-            border-radius: 8px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-
-        #dias-container .dia-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="menu-container">
-
-        <h2>Menu</h2>
-
-        <div id="userName">A carregar...</div>
-
-        <!-- Botões principais -->
-        <button id="btn-numeros" type="button">Números</button>
-        <button id="btn-series" type="button">Séries</button>
-
-        <!-- Botões de escolha de dia -->
-        <div id="dias-container">
-            <button class="dia-btn" data-dia="terca" type="button">Terça</button>
-            <button class="dia-btn" data-dia="quinta" type="button">Quinta</button>
-            <button class="dia-btn" data-dia="sabado" type="button">Sábado</button>
-        </div>
-
-        <button id="logoutBtn" type="button">Terminar Sessão</button>
-
-    </div>
-
-    <!-- Script principal -->
-    <script type="module" src="menu.js"></script>
-
-    <!-- Script para guardar o dia escolhido -->
-    <script>
-        let destino = null;
-
-        document.getElementById("btn-numeros").addEventListener("click", () => {
-            destino = "numeros.html";
-            document.getElementById("dias-container").style.display = "block";
+            if (destino === "series") {
+                if (dia === "terca") window.location.href = "series_terca.html";
+                if (dia === "quinta") window.location.href = "series_quinta.html";
+                if (dia === "sabado") window.location.href = "series_sabado.html";
+            }
         });
-
-        document.getElementById("btn-series").addEventListener("click", () => {
-            destino = "series.html";
-            document.getElementById("dias-container").style.display = "block";
-        });
-
-        document.querySelectorAll(".dia-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const dia = btn.dataset.dia;
-                localStorage.setItem("diaEscolhido", dia);
-                if (destino) window.location.href = destino;
-            });
-        });
-    </script>
-
-</body>
-</html>
+    });
+</script>
