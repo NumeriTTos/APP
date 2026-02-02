@@ -60,19 +60,15 @@ onAuthStateChanged(auth, async user => {
 // ======================================================
 //  MOSTRAR BOTÕES DE DIAS
 // ======================================================
-if (btnNumeros) {
-    btnNumeros.addEventListener("click", () => {
-        diasContainer.style.display = "block";
-        localStorage.setItem("tipoRegisto", "numeros");
-    });
-}
+btnNumeros.addEventListener("click", () => {
+    diasContainer.style.display = "block";
+    localStorage.setItem("tipoRegisto", "numeros");
+});
 
-if (btnSeries) {
-    btnSeries.addEventListener("click", () => {
-        diasContainer.style.display = "block";
-        localStorage.setItem("tipoRegisto", "series");
-    });
-}
+btnSeries.addEventListener("click", () => {
+    diasContainer.style.display = "block";
+    localStorage.setItem("tipoRegisto", "series");
+});
 
 // ======================================================
 //  SELECIONAR DIA E REDIRECIONAR
@@ -85,9 +81,15 @@ diaBtns.forEach(btn => {
         localStorage.setItem("diaSelecionado", dia);
 
         if (tipo === "numeros") {
-            window.location.href = "numeros.html";
-        } else if (tipo === "series") {
-            window.location.href = "series.html";
+            if (dia === "terca") window.location.href = "terca.html";
+            if (dia === "quinta") window.location.href = "quinta.html";
+            if (dia === "sabado") window.location.href = "sabado.html";
+        }
+
+        if (tipo === "series") {
+            if (dia === "terca") window.location.href = "series_terca.html";
+            if (dia === "quinta") window.location.href = "series_quinta.html";
+            if (dia === "sabado") window.location.href = "series_sabado.html";
         }
     });
 });
@@ -95,10 +97,8 @@ diaBtns.forEach(btn => {
 // ======================================================
 //  LOGOUT
 // ======================================================
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-        signOut(auth).then(() => {
-            window.location.href = "index.html";
-        });
+logoutBtn.addEventListener("click", () => {
+    signOut(auth).then(() => {
+        window.location.href = "index.html";
     });
-}
+});
