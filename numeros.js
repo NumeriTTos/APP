@@ -14,6 +14,10 @@ import {
 
 let currentUser = null;
 
+// 🔹 IDENTIFICADOR DA LISTA / DIA
+// Altera este valor em cada página (sabado, terca, quinta, ...)
+const LISTA_ID = "sabado";
+
 // 🔥 Garantir user + carregar dados Firestore só depois de autenticado
 onAuthStateChanged(auth, async user => {
     if (!user) {
@@ -71,7 +75,7 @@ let totais = {};
 async function guardarFixoFirestore(num, valor, texto) {
     if (!currentUser) return;
 
-    const ref = doc(db, "users", currentUser.uid, "fixos", `${num}_${valor}`);
+    const ref = doc(db, "users", currentUser.uid, `fixos_${LISTA_ID}`, `${num}_${valor}`);
 
     await setDoc(ref, {
         numero: num,
@@ -84,7 +88,7 @@ async function guardarFixoFirestore(num, valor, texto) {
 async function carregarFixosFirestore() {
     if (!currentUser) return;
 
-    const snap = await getDocs(collection(db, "users", currentUser.uid, "fixos"));
+    const snap = await getDocs(collection(db, "users", currentUser.uid, `fixos_${LISTA_ID}`));
 
     snap.forEach(docSnap => {
         const item = docSnap.data();
@@ -99,7 +103,7 @@ async function carregarFixosFirestore() {
 async function apagarFixoFirestore(num, valor) {
     if (!currentUser) return;
 
-    const ref = doc(db, "users", currentUser.uid, "fixos", `${num}_${valor}`);
+    const ref = doc(db, "users", currentUser.uid, `fixos_${LISTA_ID}`, `${num}_${valor}`);
     await deleteDoc(ref);
 }
 
@@ -110,7 +114,7 @@ async function guardarNumeroFirestore(num, valor, texto) {
     if (!currentUser) return;
 
     await addDoc(
-        collection(db, "users", currentUser.uid, "numeros"),
+        collection(db, "users", currentUser.uid, `numeros_${LISTA_ID}`),
         {
             numero: num,
             valor: valor,
@@ -123,7 +127,7 @@ async function guardarNumeroFirestore(num, valor, texto) {
 async function carregarNumerosFirestore() {
     if (!currentUser) return;
 
-    const snap = await getDocs(collection(db, "users", currentUser.uid, "numeros"));
+    const snap = await getDocs(collection(db, "users", currentUser.uid, `numeros_${LISTA_ID}`));
 
     snap.forEach(docSnap => {
         const item = docSnap.data();
@@ -141,7 +145,7 @@ async function carregarNumerosFirestore() {
 async function atualizarTotalFirestore(num, novoTotal) {
     if (!currentUser) return;
 
-    const ref = doc(db, "users", currentUser.uid, "totais", num);
+    const ref = doc(db, "users", currentUser.uid, `totais_${LISTA_ID}`, num);
 
     await setDoc(ref, {
         numero: num,
@@ -153,7 +157,7 @@ async function atualizarTotalFirestore(num, novoTotal) {
 async function carregarTotaisFirestore() {
     if (!currentUser) return;
 
-    const snap = await getDocs(collection(db, "users", currentUser.uid, "totais"));
+    const snap = await getDocs(collection(db, "users", currentUser.uid, `totais_${LISTA_ID}`));
 
     totais = {};
 
@@ -167,23 +171,23 @@ async function carregarTotaisFirestore() {
 async function limparTotaisFirestore() {
     if (!currentUser) return;
 
-    const snap = await getDocs(collection(db, "users", currentUser.uid, "totais"));
+    const snap = await getDocs(collection(db, "users", currentUser.uid, `totais_${LISTA_ID}`));
     const promises = [];
     snap.forEach(docSnap => {
-        promises.push(deleteDoc(doc(db, "users", currentUser.uid, "totais", docSnap.id)));
+        promises.push(deleteDoc(doc(db, "users", currentUser.uid, `totais_${LISTA_ID}`, docSnap.id)));
     });
     await Promise.all(promises);
 }
 
-// 🔥 NOVO — APAGAR NÚMEROS DA FIRESTORE
+// 🔥 APAGAR NÚMEROS DA FIRESTORE (POR DIA)
 async function limparNumerosFirestore() {
     if (!currentUser) return;
 
-    const snap = await getDocs(collection(db, "users", currentUser.uid, "numeros"));
+    const snap = await getDocs(collection(db, "users", currentUser.uid, `numeros_${LISTA_ID}`));
     const promises = [];
 
     snap.forEach(docSnap => {
-        promises.push(deleteDoc(doc(db, "users", currentUser.uid, "numeros", docSnap.id)));
+        promises.push(deleteDoc(doc(db, "users", currentUser.uid, `numeros_${LISTA_ID}`, docSnap.id)));
     });
 
     await Promise.all(promises);
@@ -415,7 +419,6 @@ apagarTudo.addEventListener("click", () => {
                 li.remove();
             });
 
-            // 🔥 AGORA APAGA TUDO NO FIRESTORE
             await limparNumerosFirestore();
             await limparTotaisFirestore();
 
