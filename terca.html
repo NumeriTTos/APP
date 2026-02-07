@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <title>NumeriTTos</title>
 
-    <!-- Fonte Android (Roboto) -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <!-- CSS externo -->
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -69,16 +66,18 @@
 
     <!-- Script para mostrar o dia escolhido -->
     <script>
-        const dia = "terca"; 
-        const campoDia = document.getElementById("diaSelecionado");
+        document.addEventListener("DOMContentLoaded", () => {
+            const dia = "terca";
+            const campoDia = document.getElementById("diaSelecionado");
 
-        const nomes = {
-            terca: "Terça",
-            quinta: "Quinta",
-            sabado: "Sábado"
-        };
+            const nomes = {
+                terca: "Terça",
+                quinta: "Quinta",
+                sabado: "Sábado"
+            };
 
-        campoDia.textContent = "Dia: " + (nomes[dia] || dia);
+            campoDia.textContent = "Dia: " + (nomes[dia] || dia);
+        });
     </script>
 
 </body>
