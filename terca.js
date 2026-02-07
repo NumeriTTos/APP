@@ -201,7 +201,11 @@ function totalDoNumero(num) {
 
 function atualizarTotal(num, valor) {
     if (isNaN(parseFloat(totais[num]))) totais[num] = 0;
+
     totais[num] = parseFloat(totais[num]) + parseFloat(valor);
+
+    if (totais[num] < 0) totais[num] = 0;
+
     atualizarTotalFirestore(num, totais[num]);
 }
 
@@ -225,13 +229,11 @@ function adicionarItemNaLista(obj, isFixo = false) {
 
     if (isFixo) li.classList.add("fixo");
 
-    // Texto principal
     const info = document.createElement("span");
     info.className = "info";
     info.textContent = `${num} — ${parseFloat(val).toFixed(2)}`;
     li.appendChild(info);
 
-    // Caixa extra
     const extraInput = document.createElement("input");
     extraInput.type = "text";
     extraInput.className = "extra-input";
@@ -245,7 +247,6 @@ function adicionarItemNaLista(obj, isFixo = false) {
         }
     });
 
-    // Botão apagar
     const btnApagar = document.createElement("button");
     btnApagar.textContent = "X";
     btnApagar.className = "apagar";
@@ -268,7 +269,6 @@ function adicionarItemNaLista(obj, isFixo = false) {
 
     li.appendChild(btnApagar);
 
-    // Botão fixar
     if (!isFixo) {
         const btnFixo = document.createElement("button");
         btnFixo.textContent = "📌";
@@ -285,7 +285,6 @@ function adicionarItemNaLista(obj, isFixo = false) {
         li.appendChild(btnFixo);
     }
 
-    // Botão desfazer fixo
     if (isFixo) {
         const btnDesfazer = document.createElement("button");
         btnDesfazer.textContent = "✓";
