@@ -89,14 +89,15 @@ async function carregarFixosFirestore() {
 
     const snap = await getDocs(collection(db, "users", currentUser.uid, `fixos_${LISTA_ID}`));
 
+    const fragment = document.createDocumentFragment();
+
     snap.forEach(docSnap => {
         const item = docSnap.data();
-        adicionarItemNaLista({
-            numero: item.numero,
-            valor: item.valor,
-            texto: item.texto || ""
-        }, true);
+        const li = criarItemDOM(item.numero, item.valor, item.texto || "", true);
+        fragment.appendChild(li);
     });
+
+    lista.appendChild(fragment);
 }
 
 async function apagarFixoFirestore(num, valor) {
@@ -128,14 +129,15 @@ async function carregarNumerosFirestore() {
 
     const snap = await getDocs(collection(db, "users", currentUser.uid, `numeros_${LISTA_ID}`));
 
+    const fragment = document.createDocumentFragment();
+
     snap.forEach(docSnap => {
         const item = docSnap.data();
-        adicionarItemNaLista({
-            numero: item.numero,
-            valor: item.valor,
-            texto: item.texto || ""
-        }, false);
+        const li = criarItemDOM(item.numero, item.valor, item.texto || "", false);
+        fragment.appendChild(li);
     });
+
+    lista.appendChild(fragment);
 }
 
 // ======================================================
@@ -215,13 +217,9 @@ function mostrarTotalDoNumero() {
 }
 
 // ======================================================
-// 9. ADICIONAR ITEM À LISTA
+// 9. CRIAR ITEM DOM (OTIMIZADO)
 // ======================================================
-function adicionarItemNaLista(obj, isFixo = false) {
-
-    const num = obj.numero;
-    const val = obj.valor;
-    const textoGuardado = obj.texto || "";
+function criarItemDOM(num, val, textoGuardado, isFixo) {
 
     const li = document.createElement("li");
     li.dataset.numero = num;
@@ -242,9 +240,7 @@ function adicionarItemNaLista(obj, isFixo = false) {
     li.appendChild(extraInput);
 
     extraInput.addEventListener("input", () => {
-        if (isFixo) {
-            guardarFixoFirestore(num, val, extraInput.value);
-        }
+        if (isFixo) guardarFixoFirestore(num, val, extraInput.value);
     });
 
     const btnApagar = document.createElement("button");
@@ -259,9 +255,7 @@ function adicionarItemNaLista(obj, isFixo = false) {
                 li.remove();
                 atualizarTotal(num, -parseFloat(val));
 
-                if (isFixo) {
-                    await apagarFixoFirestore(num, val);
-                }
+                if (isFixo) await apagarFixoFirestore(num, val);
 
                 mostrarTotalDoNumero();
             });
@@ -276,9 +270,8 @@ function adicionarItemNaLista(obj, isFixo = false) {
 
         btnFixo.addEventListener("click", () => {
             guardarFixoFirestore(num, val, extraInput.value);
-
             li.remove();
-            adicionarItemNaLista({ numero: num, valor: val, texto: extraInput.value }, true);
+            lista.appendChild(criarItemDOM(num, val, extraInput.value, true));
             mostrarTotalDoNumero();
         });
 
@@ -292,20 +285,27 @@ function adicionarItemNaLista(obj, isFixo = false) {
 
         btnDesfazer.addEventListener("click", async () => {
             await apagarFixoFirestore(num, val);
-
             li.remove();
-            adicionarItemNaLista({ numero: num, valor: val, texto: extraInput.value }, false);
+            lista.appendChild(criarItemDOM(num, val, extraInput.value, false));
             mostrarTotalDoNumero();
         });
 
         li.appendChild(btnDesfazer);
     }
 
+    return li;
+}
+
+// ======================================================
+// 10. ADICIONAR ITEM (AGORA SIMPLIFICADO)
+// ======================================================
+function adicionarItemNaLista(obj, isFixo = false) {
+    const li = criarItemDOM(obj.numero, obj.valor, obj.texto || "", isFixo);
     lista.appendChild(li);
 }
 
 // ======================================================
-// 10. VALIDAÇÕES
+// 11. VALIDAÇÕES
 // ======================================================
 numero.addEventListener("input", () => {
     numero.value = numero.value.replace(/[^0-9]/g, "").slice(0, 3);
@@ -366,7 +366,7 @@ function erro(msg) {
 }
 
 // ======================================================
-// 11. ENTER → CONFIRMAR
+// 12. ENTER → CONFIRMAR
 // ======================================================
 document.addEventListener("keydown", e => {
     if (e.key === "Enter") {
@@ -376,7 +376,7 @@ document.addEventListener("keydown", e => {
 });
 
 // ======================================================
-// 12. REGISTAR ITEM
+// 13. REGISTAR ITEM
 // ======================================================
 botao.addEventListener("click", async e => {
     e.preventDefault();
@@ -405,7 +405,7 @@ botao.addEventListener("click", async e => {
 });
 
 // ======================================================
-// 13. APAGAR LISTA COMPLETA
+// 14. APAGAR LISTA COMPLETA
 // ======================================================
 apagarTudo.addEventListener("click", () => {
     mostrarPopupConfirmacao("Tem a certeza que deseja apagar TODOS os números?")
@@ -426,7 +426,7 @@ apagarTudo.addEventListener("click", () => {
 });
 
 // ======================================================
-// 14. PESQUISA
+// 15. PESQUISA
 // ======================================================
 pesquisa.addEventListener("input", () => {
     const termo = pesquisa.value.toLowerCase();
